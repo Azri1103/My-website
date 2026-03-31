@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeatMaster Pro | E-Learning Pemindahan Haba</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .active-tab {
+            border-bottom: 4px solid #f97316;
+            color: #f97316;
+        }
+
+        .gradient-wall {
+            background: linear-gradient(to right, var(--outside-color, #ef4444), var(--inside-color, #3b82f6));
+            transition: background 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thermal-resistor {
+            width: 60px;
+            height: 30px;
+            border: 2px solid #475569;
+            position: relative;
+            background: repeating-linear-gradient(45deg, transparent, transparent 5px, #94a3b8 5px, #94a3b8 10px);
+        }
+
+        .electric-resistor {
+            width: 60px;
+            height: 20px;
+            background: #fde047;
+            border: 2px solid #854d0e;
+            border-radius: 4px;
+        }
+
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+
+        .quiz-option.selected {
+            border-color: #f97316;
+            background-color: #fff7ed;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="text-slate-900">
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-br from-orange-500 to-red-600 p-2.5 rounded-xl shadow-lg shadow-orange-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.989 7.989 0 01-2.343 5.657z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight block leading-none">HeatMaster <span class="text-orange-600">Pro</span></span>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Simulator Terma Akademik</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="showSection('notes')" id="nav-notes" class="nav-link py-7 px-1 font-semibold transition active-tab">Nota</button>
+                    <button onclick="showSection('video')" id="nav-video" class="nav-link py-7 px-1 font-semibold text-slate-500 hover:text-orange-600 transition">Kuliah</button>
+                    <button onclick="showSection('simulation')" id="nav-simulation" class="nav-link py-7 px-1 font-semibold text-slate-500 hover:text-orange-600 transition">Makmal Virtual</button>
+                    <button onclick="showSection('quiz')" id="nav-quiz" class="nav-link py-7 px-1 font-semibold text-slate-500 hover:text-orange-600 transition">Ujian</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 py-10">
+        
+        <!-- SECTION: NOTES -->
+        <section id="section-notes" class="content-section">
+            <div class="bg-white rounded-[2rem] p-10 shadow-xl shadow-slate-200/50 border border-slate-100 relative overflow-hidden">
+                <h2 class="text-4xl font-extrabold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600">Dasar Pemindahan Haba</h2>
+                
+                <div class="grid lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-2 space-y-8">
+                        <div class="bg-slate-50 p-8 rounded-2xl border-l-8 border-orange-500">
+                            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                                <span class="text-orange-500">01.</span> Konduksi (Conduction)
+                            </h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Berlaku apabila tenaga terma berpindah melalui interaksi antara zarah dalam bahan pepejal. Dalam logam, elektron bebas membantu memindahkan tenaga dengan sangat pantas.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-2xl border-t-4 border-blue-400">
+                                <h4 class="font-bold text-blue-900 mb-2">Konveksi</h4>
+                                <p class="text-sm text-blue-800/70 italic">Pergerakan bendalir seperti udara atau air yang membawa tenaga panas bersama alirannya.</p>
+                            </div>
+                            <div class="bg-red-50 p-6 rounded-2xl border-t-4 border-red-400">
+                                <h4 class="font-bold text-red-900 mb-2">Radiasi</h4>
+                                <p class="text-sm text-red-800/70 italic">Haba sampai melalui gelombang infra-merah tanpa memerlukan medium (vakum).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 rounded-3xl text-white shadow-xl">
+                            <h3 class="text-xl font-bold mb-6 text-orange-400 border-b border-slate-700 pb-2 italic">Formula Utama</h3>
+                            <div class="space-y-8">
+                                <div class="text-center">
+                                    <p class="text-xs uppercase tracking-widest text-slate-400 mb-2">Hukum Fourier</p>
+                                    <p class="text-2xl font-serif">q = -kA (dT / dx)</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs uppercase tracking-widest text-slate-400 mb-2">Rintangan Terma</p>
+                                    <p class="text-2xl font-serif">Rt = L / (kA)</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-xs uppercase tracking-widest text-slate-400 mb-2">Analogi Litar</p>
+                                    <p class="text-2xl font-serif">dT = q * Rt</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: VIDEO LECTURE -->
+        <section id="section-video" class="content-section hidden">
+            <div class="bg-white rounded-[2rem] p-10 shadow-xl border border-slate-100">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold">Kuliah Video Terpilih</h2>
+                    <span class="px-4 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest">Video Pengenalan</span>
+                </div>
+                
+                <div class="grid lg:grid-cols-4 gap-8">
+                    <div class="lg:col-span-3">
+                        <div class="aspect-video w-full rounded-3xl overflow-hidden bg-slate-900 shadow-2xl">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/lvyCe0UaqJY" title="Conduction, Convection, and Radiation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="mt-6 flex items-start gap-4">
+                            <div class="bg-orange-500 text-white p-3 rounded-full">
+                                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold">Tiga Kaedah Pemindahan Haba</h3>
+                                <p class="text-slate-500 mt-2">Video ini merangkumi perbezaan antara konduksi, konveksi, dan radiasi dengan contoh kehidupan seharian yang mudah difahami.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: SIMULATION -->
+        <section id="section-simulation" class="content-section hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100 flex flex-col gap-8">
+                    <h2 class="text-xl font-bold mb-2">Parameter Sistem</h2>
+                    <div class="space-y-6">
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-500 mb-2 uppercase tracking-wide">Suhu Luar (T1)</label>
+                            <div class="flex items-center gap-4">
+                                <input type="range" id="tout" min="-20" max="100" value="35" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-red-500">
+                                <span id="val-tout" class="w-16 text-right font-mono font-bold text-red-600">35°C</span>
+                            </div>
+                        </div>
+                        <div class="group">
+                            <label class="block text-sm font-bold text-slate-500 mb-2 uppercase tracking-wide">Suhu Dalam (T2)</label>
+                            <div class="flex items-center gap-4">
+                                <input type="range" id="tin" min="10" max="40" value="22" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                                <span id="val-tin" class="w-16 text-right font-mono font-bold text-blue-600">22°C</span>
+                            </div>
+                        </div>
+                        <div class="group pt-4 border-t border-slate-100">
+                            <label class="block text-sm font-bold text-slate-500 mb-2 uppercase tracking-wide">Bahan & Ketebalan</label>
+                            <select id="material" class="w-full rounded-xl border-slate-200 p-4 bg-slate-50 border outline-none mb-4">
+                                <option value="0.7">Batu Bata (k=0.7)</option>
+                                <option value="1.5">Konkrit (k=1.5)</option>
+                                <option value="0.04">Penebat (k=0.04)</option>
+                                <option value="200">Aluminium (k=200)</option>
+                            </select>
+                            <div class="flex items-center gap-4">
+                                <input type="range" id="thickness" min="0.05" max="1.0" step="0.05" value="0.30" class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800">
+                                <span id="val-thick" class="w-16 text-right font-mono font-bold">0.30m</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto bg-slate-900 text-white p-8 rounded-3xl">
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest mb-4">Analitik</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-xs text-slate-400">Kadar Haba (q):</span>
+                                <span id="res-flux" class="font-mono text-orange-400 font-bold">--</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs text-slate-400">Rintangan (Rt):</span>
+                                <span id="res-rval" class="font-mono text-emerald-400 font-bold">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                        <h3 class="text-xs font-black uppercase text-slate-400 mb-6 tracking-widest">Visualisasi Fizikal</h3>
+                        <div class="relative h-40 w-full rounded-2xl overflow-hidden flex border border-slate-100">
+                            <div id="outside-visual" class="w-24 flex items-center justify-center text-white text-xs font-black">LUAR</div>
+                            <div id="wall-visual" class="flex-1 gradient-wall"></div>
+                            <div id="inside-visual" class="w-24 flex items-center justify-center text-white text-xs font-black">DALAM</div>
+                        </div>
+                        <div class="mt-6 h-64">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100">
+                        <h3 class="text-xs font-black uppercase text-slate-400 mb-8 tracking-widest">Analogi Litar</h3>
+                        <div class="grid md:grid-cols-2 gap-10">
+                            <div class="p-6 bg-slate-50 rounded-2xl border">
+                                <p class="text-[10px] font-bold text-slate-400 mb-4 uppercase tracking-widest">Litar Terma (dT = q * Rt)</p>
+                                <div class="flex items-center justify-center py-6">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="h-0.5 bg-slate-300 w-12"></div>
+                                    <div class="thermal-resistor flex items-center justify-center text-[8px] font-bold">Rt</div>
+                                    <div class="h-0.5 bg-slate-300 w-12"></div>
+                                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                </div>
+                            </div>
+                            <div class="p-6 bg-yellow-50/50 rounded-2xl border border-yellow-200">
+                                <p class="text-[10px] font-bold text-yellow-600 mb-4 uppercase tracking-widest">Litar Elektrik (V = I * R)</p>
+                                <div class="flex items-center justify-center py-6">
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="h-0.5 bg-yellow-400 w-12"></div>
+                                    <div class="electric-resistor flex items-center justify-center text-[8px] font-bold">R</div>
+                                    <div class="h-0.5 bg-yellow-400 w-12"></div>
+                                    <div class="w-3 h-3 rounded-full bg-slate-800"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: QUIZ -->
+        <section id="section-quiz" class="content-section hidden">
+            <div class="max-w-3xl mx-auto bg-white rounded-[2rem] p-12 shadow-2xl border border-slate-100">
+                <div id="quiz-container">
+                    <div id="quiz-header" class="flex justify-between items-center mb-10">
+                        <div>
+                            <h2 class="text-3xl font-bold">Ujian Kefahaman</h2>
+                            <p class="text-slate-400 text-sm">Jawab 10 soalan untuk melihat markah akhir anda.</p>
+                        </div>
+                        <span id="quiz-progress" class="bg-orange-100 text-orange-700 px-5 py-2 rounded-2xl text-sm font-black">1 / 10</span>
+                    </div>
+
+                    <div id="quiz-content" class="min-h-[400px]">
+                        <!-- Content via JS -->
+                    </div>
+
+                    <div id="quiz-result" class="hidden text-center py-10">
+                        <div id="score-circle" class="w-32 h-32 rounded-full border-8 border-orange-500 flex items-center justify-center mx-auto mb-6">
+                            <span id="final-score-text" class="text-4xl font-black text-orange-600">0/10</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-2">Keputusan Akhir</h3>
+                        <p id="feedback-text" class="text-slate-500 mb-8">Tahniah kerana berjaya menamatkan kuiz ini.</p>
+                        <button onclick="startNewQuiz()" class="px-8 py-4 bg-orange-600 text-white rounded-2xl font-bold hover:bg-orange-700 transition shadow-lg">Cuba Lagi</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('section-' + sectionId).classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-tab', 'text-orange-600'));
+            document.getElementById('nav-' + sectionId).classList.add('active-tab', 'text-orange-600');
+            if (sectionId === 'simulation' && chart) setTimeout(() => chart.resize(), 50);
+        }
+
+        // Simulation
+        const toutIn = document.getElementById('tout');
+        const tinIn = document.getElementById('tin');
+        const thickIn = document.getElementById('thickness');
+        const matSel = document.getElementById('material');
+        const valTout = document.getElementById('val-tout');
+        const valTin = document.getElementById('val-tin');
+        const valThick = document.getElementById('val-thick');
+        const resFlux = document.getElementById('res-flux');
+        const resRval = document.getElementById('res-rval');
+        const wallVis = document.getElementById('wall-visual');
+        const outVis = document.getElementById('outside-visual');
+        const inVis = document.getElementById('inside-visual');
+
+        let chart;
+
+        function getTempColor(temp) {
+            const ratio = Math.max(0, Math.min(1, (temp + 20) / 120));
+            const r = Math.floor(255 * ratio);
+            const b = Math.floor(255 * (1 - ratio));
+            const g = Math.floor(100 * (1 - Math.abs(0.5 - ratio) * 2));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('tempChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Profil Suhu',
+                        data: [],
+                        borderColor: '#f97316',
+                        borderWidth: 3,
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        fill: true,
+                        tension: 0,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: -25, max: 105, title: { display: true, text: 'Suhu (°C)' } },
+                        x: { title: { display: true, text: 'Jarak (m)' } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateSimulation() {
+            const T1 = parseFloat(toutIn.value);
+            const T2 = parseFloat(tinIn.value);
+            const L = parseFloat(thickIn.value);
+            const k = parseFloat(matSel.value);
+            const A = 1.0;
+
+            valTout.innerText = `${T1}°C`;
+            valTin.innerText = `${T2}°C`;
+            valThick.innerText = `${L.toFixed(2)}m`;
+
+            const Rt = L / (k * A);
+            const q = (T1 - T2) / Rt;
+
+            resFlux.innerText = `${Math.abs(q).toFixed(1)} W`;
+            resRval.innerText = `${Rt.toFixed(4)} K/W`;
+
+            const c1 = getTempColor(T1);
+            const c2 = getTempColor(T2);
+            outVis.style.backgroundColor = c1;
+            inVis.style.backgroundColor = c2;
+            wallVis.style.setProperty('--outside-color', c1);
+            wallVis.style.setProperty('--inside-color', c2);
+
+            const steps = 10;
+            const data = [];
+            const labels = [];
+            for (let i = 0; i <= steps; i++) {
+                const x = (i / steps) * L;
+                const Tx = T1 + (T2 - T1) * (i / steps);
+                data.push(Tx.toFixed(2));
+                labels.push(x.toFixed(2));
+            }
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update('none');
+        }
+
+        // Quiz Logic
+        const questionsBank = [
+            { q: "Manakah bahan yang mempunyai kekonduksian terma (k) tertinggi?", o: ["Batu Bata", "Penebat", "Konkrit", "Aluminium"], c: 3 },
+            { q: "Haba mengalir dari suhu ____ ke suhu ____.", o: ["Rendah, Tinggi", "Tinggi, Rendah", "Vakum, Pepejal", "Sama, Berbeza"], c: 1 },
+            { q: "Apakah unit bagi kadar pemindahan haba (q)?", o: ["Joule", "Pascal", "Watt", "Newton"], c: 2 },
+            { q: "Semakin tebal bahan, rintangan terma (Rt) akan ____.", o: ["Bertambah", "Berkurang", "Sama", "Menjadi Sifar"], c: 0 },
+            { q: "Apakah analogi Voltan dalam sistem terma?", o: ["Aliran Haba (q)", "Rintangan (Rt)", "Perbezaan Suhu (dT)", "Luas (A)"], c: 2 },
+            { q: "Konduksi paling berkesan dalam medium ____.", o: ["Pepejal", "Cecair", "Gas", "Vakum"], c: 0 },
+            { q: "Radiasi tidak memerlukan medium untuk berpindah. Benar atau salah?", o: ["Benar", "Salah"], c: 0 },
+            { q: "Hukum Fourier menerangkan tentang pemindahan haba secara ____.", o: ["Konveksi", "Radiasi", "Konduksi", "Induksi"], c: 2 },
+            { q: "Penebat (insulator) mempunyai nilai k yang ____.", o: ["Sangat Tinggi", "Sangat Rendah", "Negatif", "Tidak Terhingga"], c: 1 },
+            { q: "Apakah yang berlaku kepada q jika k meningkat?", o: ["q akan berkurang", "q akan bertambah", "q akan kekal sama", "q akan terhenti"], c: 1 },
+            { q: "Aliran udara panas dalam oven adalah contoh ____.", o: ["Konduksi", "Konveksi", "Radiasi", "Penebatan"], c: 1 },
+            { q: "Haba dari api terasa pada tangan tanpa menyentuh adalah kesan ____.", o: ["Radiasi", "Konduksi", "Litar Pintas", "Konveksi"], c: 0 },
+            { q: "Formula rintangan terma ialah ____.", o: ["Rt = L / (kA)", "Rt = k / (LA)", "Rt = A / (kL)", "Rt = q / dT"], c: 0 }
+        ];
+
+        let activeQuestions = [];
+        let curQIdx = 0;
+        let score = 0;
+        let selectedIdx = null;
+
+        function startNewQuiz() {
+            // Shuffle and pick 10
+            activeQuestions = [...questionsBank].sort(() => 0.5 - Math.random()).slice(0, 10);
+            curQIdx = 0;
+            score = 0;
+            selectedIdx = null;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-header').classList.remove('hidden');
+            document.getElementById('quiz-content').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const cont = document.getElementById('quiz-content');
+            const data = activeQuestions[curQIdx];
+            document.getElementById('quiz-progress').innerText = `${curQIdx + 1} / 10`;
+            
+            cont.innerHTML = `
+                <div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <p class="text-2xl font-bold text-slate-800 mb-8 leading-tight">${data.q}</p>
+                    <div class="grid gap-4">
+                        ${data.o.map((opt, i) => `
+                            <button onclick="handleSelect(${i})" id="qopt-${i}" class="quiz-option text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-slate-300 font-semibold text-slate-600 bg-white">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <button onclick="handleAnswerSubmit()" class="mt-10 w-full py-5 bg-slate-900 text-white rounded-2xl font-bold shadow-xl hover:bg-slate-800 transition">
+                        ${curQIdx === 9 ? 'Lihat Keputusan' : 'Seterusnya'}
+                    </button>
+                </div>
+            `;
+            selectedIdx = null;
+        }
+
+        function handleSelect(i) {
+            selectedIdx = i;
+            document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            document.getElementById(`qopt-${i}`).classList.add('selected');
+        }
+
+        function handleAnswerSubmit() {
+            if (selectedIdx === null) return alert("Sila pilih jawapan!");
+            
+            // Check correct secretly
+            if (selectedIdx === activeQuestions[curQIdx].c) {
+                score++;
+            }
+
+            if (curQIdx < 9) {
+                curQIdx++;
+                renderQuestion();
+            } else {
+                showFinalResult();
+            }
+        }
+
+        function showFinalResult() {
+            document.getElementById('quiz-header').classList.add('hidden');
+            document.getElementById('quiz-content').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+            document.getElementById('final-score-text').innerText = `${score}/10`;
+            
+            let feedback = "Teruskan berusaha untuk memahami konsep haba!";
+            if(score > 8) feedback = "Luar biasa! Anda pakar dalam pemindahan haba.";
+            else if(score > 5) feedback = "Bagus! Anda faham asas dengan baik.";
+            
+            document.getElementById('feedback-text').innerText = feedback;
+        }
+
+        [toutIn, tinIn, thickIn, matSel].forEach(el => el.addEventListener('input', updateSimulation));
+        window.onload = () => {
+            initChart();
+            updateSimulation();
+            startNewQuiz();
+        };
+    </script>
+</body>
+</html>
