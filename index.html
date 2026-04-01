@@ -61,7 +61,6 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Thermal Circuit Visuals */
         .node {
             width: 12px;
             height: 12px;
@@ -93,11 +92,29 @@
             border-radius: 5px;
             accent-color: var(--primary);
         }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        /* Tabs Styling */
+        .tab-btn-active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
     </style>
 </head>
 <body class="text-slate-900 selection:bg-orange-100 selection:text-orange-900">
 
-    <!-- DESKTOP TOP NAV -->
+    <!-- NAVIGASI DESKTOP -->
     <nav class="hidden md:block bg-white/90 sticky top-0 z-50 border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
@@ -108,20 +125,20 @@
                     <h1 class="text-2xl font-extrabold tracking-tight">HeatMaster <span class="text-orange-600">PRO</span></h1>
                 </div>
                 <div class="flex space-x-10 h-full">
-                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav h-full px-2 font-bold transition-all nav-item-active-d">NOTES</button>
-                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">LECTURES</button>
-                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">LABS</button>
-                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">QUIZ</button>
+                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav h-full px-2 font-bold transition-all nav-item-active-d">NOTA</button>
+                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">KULIAH</button>
+                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">MAKMAL</button>
+                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">KUIZ</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- MOBILE BOTTOM NAV -->
+    <!-- NAVIGASI MOBILE -->
     <nav class="md:hidden fixed bottom-4 left-4 right-4 h-20 bg-white shadow-2xl rounded-2xl border border-slate-100 z-50 flex justify-around items-center px-4">
         <button onclick="showSection('notes')" id="m-nav-notes" class="m-nav flex flex-col items-center justify-center w-16 h-14 nav-item-active-m">
             <i class="fa-solid fa-book-open mb-1"></i>
-            <span class="text-[10px] font-bold uppercase tracking-widest">Notes</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Nota</span>
         </button>
         <button onclick="showSection('video')" id="m-nav-video" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
             <i class="fa-solid fa-play-circle mb-1"></i>
@@ -129,67 +146,36 @@
         </button>
         <button onclick="showSection('simulation')" id="m-nav-simulation" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
             <i class="fa-solid fa-microscope mb-1"></i>
-            <span class="text-[10px] font-bold uppercase tracking-widest">Lab</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Makmal</span>
         </button>
         <button onclick="showSection('quiz')" id="m-nav-quiz" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
             <i class="fa-solid fa-graduation-cap mb-1"></i>
-            <span class="text-[10px] font-bold uppercase tracking-widest">Quiz</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Kuiz</span>
         </button>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 py-8 md:py-12">
         
-        <!-- SECTION: NOTES -->
+        <!-- SEKSYEN: NOTA -->
         <section id="section-notes" class="content-section">
-            <div class="mb-12">
-                <span class="text-orange-600 font-bold tracking-[0.2em] text-xs uppercase">Learning Material</span>
-                <h2 class="text-4xl md:text-5xl font-black mt-2">Thermal Engineering Foundations</h2>
+            <div class="mb-10 text-center md:text-left">
+                <span class="text-orange-600 font-bold tracking-[0.2em] text-xs uppercase">Bahan Pembelajaran</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">Mekanisme Pemindahan Haba</h2>
+            </div>
+
+            <!-- Note Tabs -->
+            <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl w-fit mx-auto md:mx-0">
+                <button onclick="switchNoteTab('conduction')" id="tab-conduction" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all tab-btn-active">Konduksi</button>
+                <button onclick="switchNoteTab('convection')" id="tab-convection" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Konveksi</button>
+                <button onclick="switchNoteTab('radiation')" id="tab-radiation" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Radiasi</button>
             </div>
             
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Conduction Card -->
-                <div class="glass-card p-8 lg:col-span-2 group hover:bg-orange-600 transition-all duration-500">
-                    <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                        <i class="fa-solid fa-atom text-orange-600 group-hover:text-white"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 group-hover:text-white transition-colors">Conduction in Solids</h3>
-                    <p class="text-slate-600 group-hover:text-orange-50 mb-8 leading-relaxed">Conduction is the transfer of energy from more energetic particles of a substance to the adjacent less energetic ones as a result of interaction between the particles.</p>
-                    
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div class="bg-white/50 p-4 rounded-xl border border-slate-100 group-hover:bg-white/10 group-hover:border-transparent transition-all">
-                            <span class="text-[10px] font-bold uppercase block mb-1 opacity-60">Metals</span>
-                            <p class="text-sm font-semibold">High free electron mobility = High conductivity (k).</p>
-                        </div>
-                        <div class="bg-white/50 p-4 rounded-xl border border-slate-100 group-hover:bg-white/10 group-hover:border-transparent transition-all">
-                            <span class="text-[10px] font-bold uppercase block mb-1 opacity-60">Insulators</span>
-                            <p class="text-sm font-semibold">Low vibration energy transfer = Low conductivity.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Formula Card -->
-                <div class="bg-slate-900 rounded-[24px] p-8 text-white shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl">Σ</div>
-                    <h3 class="text-xl font-bold mb-8 text-orange-400">Core Equations</h3>
-                    <div class="space-y-10">
-                        <div class="relative pl-6 border-l-2 border-orange-500">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Heat Transfer Rate (Q)</span>
-                            <p class="text-2xl engineering-font tracking-tighter">Q_dot = -kA (dT/dx)</p>
-                        </div>
-                        <div class="relative pl-6 border-l-2 border-blue-500">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Thermal Resistance (R_th)</span>
-                            <p class="text-2xl engineering-font tracking-tighter">R_wall = L / (kA)</p>
-                        </div>
-                        <div class="relative pl-6 border-l-2 border-emerald-500">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Composite Wall Flux</span>
-                            <p class="text-2xl engineering-font tracking-tighter">Q_dot = (T_1 - T_2) / ΣR</p>
-                        </div>
-                    </div>
-                </div>
+            <div id="note-display" class="grid lg:grid-cols-3 gap-8">
+                <!-- Kandungan nota akan disuntik oleh JS -->
             </div>
         </section>
 
-        <!-- SECTION: VIDEO -->
+        <!-- SEKSYEN: VIDEO -->
         <section id="section-video" class="content-section hidden">
             <div class="glass-card p-6 md:p-10 max-w-4xl mx-auto">
                 <div class="flex items-center gap-4 mb-8">
@@ -197,8 +183,8 @@
                         <i class="fa-brands fa-youtube text-xl"></i>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold">Concept Deep Dive</h2>
-                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Video Lecture Series</p>
+                        <h2 class="text-2xl font-bold">Analisis Mendalam Konsep</h2>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Siri Kuliah Video</p>
                     </div>
                 </div>
                 <div class="aspect-video w-full rounded-[24px] overflow-hidden bg-black shadow-2xl">
@@ -207,58 +193,54 @@
             </div>
         </section>
 
-        <!-- SECTION: SIMULATION -->
+        <!-- SEKSYEN: SIMULASI -->
         <section id="section-simulation" class="content-section hidden">
             <div class="grid lg:grid-cols-12 gap-8">
                 
-                <!-- Left: Control Panel -->
                 <div class="lg:col-span-4 space-y-6">
                     <div class="glass-card p-8">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="text-xl font-bold flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-orange-600"></i> Boundary & Layers
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Sempadan & Lapisan
                             </h3>
                             <button onclick="addLayer()" class="text-xs bg-orange-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-700 transition-colors">
-                                + Add Layer
+                                + Tambah
                             </button>
                         </div>
 
                         <div class="space-y-6">
-                            <!-- Temp Controls -->
                             <div class="bg-slate-50 p-4 rounded-xl space-y-4">
                                 <div>
                                     <div class="flex justify-between">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_outside</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Luar (Panas)</label>
                                         <span id="v-t1" class="text-red-600 font-bold engineering-font">40°C</span>
                                     </div>
                                     <input type="range" id="t1" min="20" max="150" value="40" class="w-full">
                                 </div>
                                 <div>
                                     <div class="flex justify-between">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_inside</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Dalam (Sejuk)</label>
                                         <span id="v-t2" class="text-blue-600 font-bold engineering-font">20°C</span>
                                     </div>
                                     <input type="range" id="t2" min="0" max="35" value="20" class="w-full">
                                 </div>
                             </div>
 
-                            <!-- Dynamic Layers Area -->
                             <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                                <!-- Layers will be injected here -->
+                                <!-- Lapisan akan disuntik di sini -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Readout Panel -->
                     <div class="bg-slate-900 rounded-[24px] p-8 text-white">
                         <div class="grid grid-cols-2 gap-6">
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Total ΣR</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Jumlah ΣR</span>
                                 <p id="out-r" class="text-2xl font-bold engineering-font text-emerald-400">0.000</p>
                                 <span class="text-[9px] text-slate-500 uppercase">K/W</span>
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Flux q''</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Kadar Haba Q_dot</span>
                                 <p id="out-q" class="text-2xl font-bold engineering-font text-orange-400">0.0</p>
                                 <span class="text-[9px] text-slate-500 uppercase">W/m²</span>
                             </div>
@@ -266,13 +248,12 @@
                     </div>
                 </div>
 
-                <!-- Right: Visualizer & Circuit -->
                 <div class="lg:col-span-8 space-y-6">
                     <div class="glass-card p-8">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                            <h3 class="font-bold">Composite Temperature Profile</h3>
+                            <h3 class="font-bold">Profil Suhu Dinding Komposit</h3>
                             <div id="material-legend" class="flex flex-wrap gap-3">
-                                <!-- Legend injected here -->
+                                <!-- Legend disuntik di sini -->
                             </div>
                         </div>
                         
@@ -280,15 +261,14 @@
                             <canvas id="tempChart"></canvas>
                         </div>
 
-                        <!-- DYNAMIC THERMAL CIRCUIT -->
                         <div class="pt-8 border-t border-slate-100">
-                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 text-center underline decoration-orange-500 underline-offset-8">Thermal Resistance Network Analogy</h4>
+                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 text-center underline decoration-orange-500 underline-offset-8">Analogi Rangkaian Rintangan Terma</h4>
                             <div id="circuit-visualizer" class="max-w-3xl mx-auto flex items-center justify-center gap-0 px-4 overflow-x-auto pb-4">
-                                <!-- Nodes and resistors injected here -->
+                                <!-- Node dan perintang disuntik di sini -->
                             </div>
                             <div class="text-center mt-8">
                                 <div class="inline-block bg-orange-50 px-6 py-2 rounded-full border border-orange-100">
-                                    <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Ohm's Law Analogy: Q_dot = (T_hot - T_cold) / R_total</p>
+                                    <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Analogi Hukum Ohm: Q_dot = (T_panas - T_sejuk) / R_total</p>
                                 </div>
                             </div>
                         </div>
@@ -298,43 +278,101 @@
             </div>
         </section>
 
-        <!-- SECTION: QUIZ -->
+        <!-- SEKSYEN: KUIZ -->
         <section id="section-quiz" class="content-section hidden">
             <div class="glass-card p-10 max-w-2xl mx-auto">
                 <div id="quiz-header" class="flex justify-between items-center mb-10 pb-6 border-b">
                     <div>
-                        <h2 class="text-2xl font-black">Engineering Assessment</h2>
-                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">Conduction & Multi-Layer Surfaces</p>
+                        <h2 class="text-2xl font-black">Penilaian Kejuruteraan</h2>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">Konduksi & Permukaan Pelbagai Lapisan</p>
                     </div>
                     <div class="w-16 h-16 rounded-full border-4 border-orange-500 flex items-center justify-center font-black" id="quiz-timer">1 / 10</div>
                 </div>
                 <div id="quiz-content" class="min-h-[300px]"></div>
                 <div id="quiz-result" class="hidden text-center py-10">
                     <div class="text-7xl font-black text-orange-600 mb-6" id="final-score">0/10</div>
-                    <h4 class="text-xl font-bold mb-2">Simulation Complete</h4>
-                    <p class="text-slate-500 mb-8">Thermal dynamics results processed.</p>
-                    <button onclick="startQuiz()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-bold hover:scale-105 transition-all">Re-run Assessment</button>
+                    <h4 class="text-xl font-bold mb-2">Simulasi Tamat</h4>
+                    <p class="text-slate-500 mb-8">Keputusan dinamik terma telah diproses.</p>
+                    <button onclick="startQuiz()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-bold hover:scale-105 transition-all">Ulang Penilaian</button>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Materials Database
         const materials = [
-            { name: "Brick", k: 0.8, color: "#94a3b8" },
-            { name: "Concrete", k: 1.4, color: "#64748b" },
-            { name: "Wood", k: 0.15, color: "#b45309" },
-            { name: "Glass Fiber", k: 0.04, color: "#38bdf8" },
-            { name: "Steel", k: 50, color: "#1e293b" }
+            { name: "Bata", k: 0.8, color: "#94a3b8" },
+            { name: "Konkrit", k: 1.4, color: "#64748b" },
+            { name: "Kayu", k: 0.15, color: "#b45309" },
+            { name: "Gentian Kaca", k: 0.04, color: "#38bdf8" },
+            { name: "Keluli", k: 50, color: "#1e293b" }
         ];
 
-        // State Management
         let chart;
         let layers = [
             { materialIdx: 0, thickness: 0.10 },
             { materialIdx: 3, thickness: 0.05 }
         ];
+
+        // NOTA DATA
+        const notesData = {
+            conduction: {
+                title: "Konduksi",
+                desc: "Pemindahan tenaga zarah-ke-zarah melalui sentuhan fizikal dalam pepejal atau bendalir pegun.",
+                formula: "Q_dot = -kA (dT/dx)",
+                sub: ["Konduktiviti (k) menentukan prestasi haba.", "Bahan logam mempunyai k yang tinggi."]
+            },
+            convection: {
+                title: "Konveksi",
+                desc: "Pemindahan haba antara permukaan pepejal dan bendalir (cecair/gas) yang bergerak.",
+                formula: "Q_dot = hA (Ts - Tf)",
+                sub: ["Hukum Penyejukan Newton.", "Pekali konveksi (h) bergantung kepada kelajuan bendalir."]
+            },
+            radiation: {
+                title: "Radiasi",
+                desc: "Tenaga yang dipancarkan oleh jirim dalam bentuk gelombang elektromagnet akibat perubahan konfigurasi elektron.",
+                formula: "Q_dot = εσA(Ts^4 - Tsur^4)",
+                sub: ["Tidak memerlukan medium (boleh dalam vakum).", "Bergantung kepada emisiviti permukaan (ε)."]
+            }
+        };
+
+        function switchNoteTab(type) {
+            // Update UI tabs
+            document.querySelectorAll('.note-tab').forEach(t => t.classList.remove('tab-btn-active', 'text-white'));
+            document.querySelectorAll('.note-tab').forEach(t => t.classList.add('text-slate-500'));
+            document.getElementById('tab-' + type).classList.add('tab-btn-active');
+            document.getElementById('tab-' + type).classList.remove('text-slate-500');
+
+            const data = notesData[type];
+            const display = document.getElementById('note-display');
+            
+            display.innerHTML = `
+                <div class="glass-card p-8 lg:col-span-2 group hover:bg-orange-600 transition-all duration-500">
+                    <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
+                        <i class="fa-solid fa-fire text-orange-600 group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 group-hover:text-white transition-colors">${data.title}</h3>
+                    <p class="text-slate-600 group-hover:text-orange-50 mb-8 leading-relaxed">${data.desc}</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        ${data.sub.map(s => `
+                            <div class="bg-white/50 p-4 rounded-xl border border-slate-100 group-hover:bg-white/10 group-hover:border-transparent transition-all">
+                                <p class="text-sm font-semibold">${s}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-[24px] p-8 text-white shadow-2xl relative overflow-hidden h-full flex flex-col justify-center">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl">Σ</div>
+                    <h3 class="text-xl font-bold mb-8 text-orange-400 uppercase tracking-widest text-xs">Persamaan Utama</h3>
+                    <div class="relative pl-6 border-l-2 border-orange-500">
+                        <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Model Matematik</span>
+                        <p class="text-2xl engineering-font tracking-tighter">${data.formula}</p>
+                    </div>
+                </div>
+            `;
+        }
 
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
@@ -347,7 +385,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- Multi-Layer Logic ---
         function renderLayers() {
             const container = document.getElementById('layers-container');
             container.innerHTML = '';
@@ -356,17 +393,22 @@
                 div.className = 'p-4 bg-white rounded-xl border border-slate-200 shadow-sm relative group';
                 div.innerHTML = `
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-[10px] font-black text-slate-400 uppercase">Layer ${idx + 1}</span>
+                        <span class="text-[10px] font-black text-slate-400 uppercase">Lapisan ${idx + 1}</span>
                         ${layers.length > 1 ? `<button onclick="removeLayer(${idx})" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
                     </div>
                     <div class="grid grid-cols-2 gap-3 mb-3">
                         <select onchange="updateLayerMaterial(${idx}, this.value)" class="text-xs font-bold p-2 rounded-lg bg-slate-50 border-none outline-none">
                             ${materials.map((m, i) => `<option value="${i}" ${layer.materialIdx == i ? 'selected' : ''}>${m.name}</option>`).join('')}
                         </select>
-                        <div class="text-right text-[10px] font-bold text-orange-600 engineering-font">${layer.thickness.toFixed(2)}m</div>
+                        <div class="flex items-center gap-1">
+                            <input type="number" step="0.01" min="0.01" max="0.5" value="${layer.thickness.toFixed(2)}" 
+                                oninput="updateLayerThickness(${idx}, this.value, 'input')"
+                                class="w-full text-right text-xs font-bold text-orange-600 engineering-font bg-orange-50 border border-orange-100 rounded px-1 outline-none">
+                            <span class="text-[9px] font-bold text-slate-400">m</span>
+                        </div>
                     </div>
-                    <input type="range" min="0.01" max="0.5" step="0.01" value="${layer.thickness}" 
-                        oninput="updateLayerThickness(${idx}, this.value)" class="w-full">
+                    <input type="range" id="range-${idx}" min="0.01" max="0.5" step="0.01" value="${layer.thickness}" 
+                        oninput="updateLayerThickness(${idx}, this.value, 'range')" class="w-full">
                 `;
                 container.appendChild(div);
             });
@@ -389,12 +431,27 @@
             updateSimulation();
         }
 
-        function updateLayerThickness(idx, val) {
-            layers[idx].thickness = parseFloat(val);
-            renderLayers();
+        function updateLayerThickness(idx, val, source) {
+            let num = parseFloat(val);
+            if (isNaN(num)) return;
+            
+            // Limit check
+            if (num < 0.01) num = 0.01;
+            if (num > 0.5) num = 0.5;
+
+            layers[idx].thickness = num;
+            
+            // Sync UI elements
+            if (source === 'input') {
+                document.getElementById(`range-${idx}`).value = num;
+            } else {
+                const input = document.querySelector(`#layers-container > div:nth-child(${idx+1}) input[type="number"]`);
+                if(input) input.value = num.toFixed(2);
+            }
+            
+            updateSimulation();
         }
 
-        // --- Simulation Core ---
         function initChart() {
             const ctx = document.getElementById('tempChart').getContext('2d');
             chart = new Chart(ctx, {
@@ -402,7 +459,7 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Temperature Profile',
+                        label: 'Profil Suhu',
                         data: [],
                         borderColor: '#f97316',
                         backgroundColor: (ctx) => {
@@ -424,7 +481,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { min: 0, max: 160, title: { display: true, text: 'Temp (°C)', font: { weight: 'bold' } } },
+                        y: { min: 0, max: 160, title: { display: true, text: 'Suhu (°C)', font: { weight: 'bold' } } },
                         x: { grid: { display: false } }
                     },
                     plugins: { legend: { display: false } }
@@ -442,32 +499,28 @@
             let Rtotal = 0;
             let resistances = [];
             
-            // Calculate Resistance for each layer
             layers.forEach(layer => {
                 const k = materials[layer.materialIdx].k;
-                const R = layer.thickness / (k * 1.0); // Assuming Area A = 1
+                const R = layer.thickness / (k * 1.0); 
                 Rtotal += R;
                 resistances.push(R);
             });
 
-            const qFlux = (T1 - T2) / Rtotal;
+            const Q_dot = (T1 - T2) / Rtotal;
             
-            // Calculate interface temperatures
             let currentT = T1;
             let tempData = [T1];
-            let labels = ['T_out'];
+            let labels = ['T_Luar'];
             
             layers.forEach((layer, i) => {
-                currentT = currentT - (qFlux * resistances[i]);
+                currentT = currentT - (Q_dot * resistances[i]);
                 tempData.push(currentT);
-                labels.push(i === layers.length - 1 ? 'T_in' : `T_int ${i+1}`);
+                labels.push(i === layers.length - 1 ? 'T_Dalam' : `T_Int ${i+1}`);
             });
 
-            // Update UI
             document.getElementById('out-r').innerText = Rtotal.toFixed(3);
-            document.getElementById('out-q').innerText = qFlux.toFixed(1);
+            document.getElementById('out-q').innerText = Q_dot.toFixed(1);
             
-            // Update Legend
             const legend = document.getElementById('material-legend');
             legend.innerHTML = layers.map(l => `
                 <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-slate-100 text-[10px] font-bold">
@@ -476,15 +529,13 @@
                 </div>
             `).join('');
 
-            // Update Circuit Visualizer
             const circuit = document.getElementById('circuit-visualizer');
             circuit.innerHTML = '';
             
-            // Start node
             circuit.innerHTML += `
                 <div class="flex flex-col items-center gap-1">
                     <div class="node bg-red-500 shadow-[0_0_8px_red]"></div>
-                    <span class="text-[8px] font-bold engineering-font">T_out</span>
+                    <span class="text-[8px] font-bold engineering-font">T_Luar</span>
                 </div>
             `;
             
@@ -496,7 +547,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <div class="node ${i === layers.length - 1 ? 'bg-blue-500 shadow-[0_0_8px_blue]' : ''}"></div>
-                        <span class="text-[8px] font-bold engineering-font">${i === layers.length - 1 ? 'T_in' : `T_i${i+1}`}</span>
+                        <span class="text-[8px] font-bold engineering-font">${i === layers.length - 1 ? 'T_Dalam' : `T_i${i+1}`}</span>
                     </div>
                 `;
             });
@@ -508,22 +559,20 @@
             }
         }
 
-        // Listeners for boundary temps
         document.getElementById('t1').addEventListener('input', updateSimulation);
         document.getElementById('t2').addEventListener('input', updateSimulation);
 
-        // --- Quiz Logic ---
         const engineeringQuestions = [
-            { q: "What is the unit of Thermal Conductivity (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
-            { q: "In a composite wall, which parameter remains constant across all layers at steady state?", o: ["Temperature Drop", "Heat Rate (Q_dot)", "Thermal Resistance", "None"], c: 1 },
-            { q: "Adding insulation to a flat wall ALWAYS increases thermal resistance.", o: ["True", "False", "Only in vacuum", "Only for metals"], c: 0 },
-            { q: "Thermal resistance is analogous to which electrical component?", o: ["Capacitor", "Inductor", "Resistor", "Diode"], c: 2 },
-            { q: "Fourier's Law states that heat flux is proportional to...", o: ["Pressure", "Density", "Temperature Gradient", "Volume"], c: 2 },
-            { q: "Which material typically has the highest 'k' value?", o: ["Wood", "Air", "Copper", "Concrete"], c: 2 },
-            { q: "Conduction heat transfer requires a medium.", o: ["True", "False", "Only in space", "Depends on color"], c: 0 },
-            { q: "Steady-state implies that temperature at any point...", o: ["Decreases", "Increases", "Does not change with time", "Is always zero"], c: 2 },
-            { q: "The 'minus' sign in Fourier's Law signifies...", o: ["Heat loss", "Heat flow opposite to temp gradient", "Math error", "Vacuum state"], c: 1 },
-            { q: "A composite wall with 3 layers will have how many nodes in its thermal circuit?", o: ["2", "3", "4", "5"], c: 2 }
+            { q: "Apakah unit bagi Konduktiviti Terma (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
+            { q: "Dalam dinding komposit, parameter manakah yang tetap merentasi semua lapisan pada keadaan mantap (steady state)?", o: ["Penurunan Suhu", "Kadar Haba (Q_dot)", "Rintangan Terma", "Tiada"], c: 1 },
+            { q: "Menambah penebat pada dinding rata SENTIASA meningkatkan rintangan terma.", o: ["Benar", "Salah", "Hanya dalam vakum", "Hanya untuk logam"], c: 0 },
+            { q: "Rintangan terma adalah analog kepada komponen elektrik yang mana?", o: ["Kapasitor", "Induktor", "Perintang", "Diod"], c: 2 },
+            { q: "Hukum Fourier menyatakan fluks haba adalah berkadar terus dengan...", o: ["Tekanan", "Ketumpatan", "Gredien Suhu", "Isipadu"], c: 2 },
+            { q: "Bahan manakah yang biasanya mempunyai nilai 'k' tertinggi?", o: ["Kayu", "Udara", "Tembaga", "Konkrit"], c: 2 },
+            { q: "Pemindahan haba secara konduksi memerlukan medium.", o: ["Benar", "Salah", "Hanya di angkasa", "Bergantung pada warna"], c: 0 },
+            { q: "Keadaan mantap (steady-state) bermaksud suhu pada mana-mana titik...", o: ["Berkurang", "Bertambah", "Tidak berubah mengikut masa", "Sentiasa sifar"], c: 2 },
+            { q: "Tanda 'negatif' dalam Hukum Fourier melambangkan...", o: ["Kehilangan haba", "Haba mengalir bertentangan dengan gredien suhu", "Ralat matematik", "Keadaan vakum"], c: 1 },
+            { q: "Dinding komposit dengan 3 lapisan akan mempunyai berapa banyak node dalam rangkaian termanya?", o: ["2", "3", "4", "5"], c: 2 }
         ];
 
         let qIdx = 0, qScore = 0, qSelect = null;
@@ -546,7 +595,7 @@
                         </button>
                     `).join('')}
                 </div>
-                <button onclick="nextQ()" class="mt-10 w-full bg-orange-600 text-white py-5 rounded-2xl font-black shadow-xl shadow-orange-200 active:scale-95 transition-transform">SUBMIT ANSWER</button>
+                <button onclick="nextQ()" class="mt-10 w-full bg-orange-600 text-white py-5 rounded-2xl font-black shadow-xl shadow-orange-200 active:scale-95 transition-transform">HANTAR JAWAPAN</button>
             `;
         }
         function updateQuizUI() {
@@ -567,6 +616,7 @@
 
         window.onload = () => {
             showSection('notes');
+            switchNoteTab('conduction');
             startQuiz();
         };
     </script>
