@@ -3,132 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeatMaster Pro | Responsive E-Learning</title>
+    <title>HeatMaster Pro | Engineering Suite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=JetBrains+Mono&display=swap');
         
+        :root {
+            --primary: #f97316;
+            --secondary: #0f172a;
+            --accent: #38bdf8;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            padding-bottom: 80px; /* Space for mobile nav */
+            background-color: #f1f5f9;
+            padding-bottom: 90px;
         }
 
         @media (min-width: 768px) {
             body { padding-bottom: 0; }
         }
 
-        .active-tab-desktop {
-            border-bottom: 4px solid #f97316;
-            color: #f97316;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
         }
 
-        .active-tab-mobile {
-            color: #f97316;
-            background-color: #fff7ed;
-            border-radius: 12px;
+        .nav-item-active-d {
+            position: relative;
+            color: var(--primary);
         }
 
-        .gradient-wall {
-            background: linear-gradient(to right, var(--outside-color, #ef4444), var(--inside-color, #3b82f6));
-            transition: background 0.5s ease;
+        .nav-item-active-d::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
         }
 
-        .thermal-resistor {
-            width: 50px;
-            height: 25px;
-            border: 2px solid #475569;
-            background: repeating-linear-gradient(45deg, transparent, transparent 5px, #94a3b8 5px, #94a3b8 10px);
+        .nav-item-active-m {
+            color: var(--primary);
+            background: rgba(249, 115, 22, 0.1);
+            border-radius: 16px;
         }
 
-        .electric-resistor {
-            width: 50px;
+        .engineering-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Thermal Circuit Visuals */
+        .node {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            z-index: 10;
+        }
+
+        .resistor-line {
+            height: 2px;
+            background: #94a3b8;
+            flex-grow: 1;
+            position: relative;
+            min-width: 40px;
+        }
+
+        .resistor-zigzag {
+            width: 30px;
             height: 15px;
-            background: #fde047;
-            border: 2px solid #854d0e;
-            border-radius: 4px;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='20' viewBox='0 0 40 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 L5 10 L8 2 L14 18 L20 2 L26 18 L32 2 L35 10 L40 10' stroke='%23475569' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            accent-color: var(--primary);
         }
     </style>
 </head>
-<body class="text-slate-900">
+<body class="text-slate-900 selection:bg-orange-100 selection:text-orange-900">
 
-    <!-- DESKTOP NAVIGATION -->
-    <nav class="hidden md:block bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4">
+    <!-- DESKTOP TOP NAV -->
+    <nav class="hidden md:block bg-white/90 sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center gap-3">
-                    <div class="bg-orange-600 p-2 rounded-lg">
-                        <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.989 7.989 0 01-2.343 5.657z" /></svg>
+                    <div class="bg-orange-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-orange-200">
+                        <i class="fa-solid fa-fire-flame-curved text-white text-lg"></i>
                     </div>
-                    <span class="text-xl font-bold">HeatMaster <span class="text-orange-600">Pro</span></span>
+                    <h1 class="text-2xl font-extrabold tracking-tight">HeatMaster <span class="text-orange-600">PRO</span></h1>
                 </div>
-                <div class="flex space-x-8 h-full">
-                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav py-7 px-1 font-semibold active-tab-desktop">Notes</button>
-                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav py-7 px-1 font-semibold text-slate-500">Lectures</button>
-                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav py-7 px-1 font-semibold text-slate-500">Lab</button>
-                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav py-7 px-1 font-semibold text-slate-500">Quiz</button>
+                <div class="flex space-x-10 h-full">
+                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav h-full px-2 font-bold transition-all nav-item-active-d">NOTES</button>
+                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">LECTURES</button>
+                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">LABS</button>
+                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav h-full px-2 font-bold text-slate-400 hover:text-slate-600 transition-all">QUIZ</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- MOBILE NAVIGATION (Bottom Bar) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 px-2 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <div class="flex justify-around items-center">
-            <button onclick="showSection('notes')" id="m-nav-notes" class="m-nav flex flex-col items-center gap-1 p-2 active-tab-mobile w-full">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Notes</span>
-            </button>
-            <button onclick="showSection('video')" id="m-nav-video" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Lectures</span>
-            </button>
-            <button onclick="showSection('simulation')" id="m-nav-simulation" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.618.309a6 6 0 00-3.414 3.414l-.309.618a6 6 0 00-.517 3.86l.477 2.387a2 2 0 00.547 1.022l1.414 1.414a2 2 0 001.022.547l2.387.477a6 6 0 003.86-.517l.618-.309a6 6 0 003.414-3.414l.309-.618a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.414-1.414z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Lab</span>
-            </button>
-            <button onclick="showSection('quiz')" id="m-nav-quiz" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Quiz</span>
-            </button>
-        </div>
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-4 left-4 right-4 h-20 bg-white shadow-2xl rounded-2xl border border-slate-100 z-50 flex justify-around items-center px-4">
+        <button onclick="showSection('notes')" id="m-nav-notes" class="m-nav flex flex-col items-center justify-center w-16 h-14 nav-item-active-m">
+            <i class="fa-solid fa-book-open mb-1"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Notes</span>
+        </button>
+        <button onclick="showSection('video')" id="m-nav-video" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
+            <i class="fa-solid fa-play-circle mb-1"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Video</span>
+        </button>
+        <button onclick="showSection('simulation')" id="m-nav-simulation" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
+            <i class="fa-solid fa-microscope mb-1"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Lab</span>
+        </button>
+        <button onclick="showSection('quiz')" id="m-nav-quiz" class="m-nav flex flex-col items-center justify-center w-16 h-14 text-slate-400">
+            <i class="fa-solid fa-graduation-cap mb-1"></i>
+            <span class="text-[10px] font-bold uppercase tracking-widest">Quiz</span>
+        </button>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+    <main class="max-w-7xl mx-auto px-4 py-8 md:py-12">
         
         <!-- SECTION: NOTES -->
         <section id="section-notes" class="content-section">
-            <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Heat Transfer Fundamentals</h2>
-                <div class="grid lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-orange-500">
-                            <h3 class="text-xl font-bold mb-2">Conduction</h3>
-                            <p class="text-slate-600 text-sm md:text-base">Occurs through molecular interaction in solids. Metals are excellent conductors due to free electrons.</p>
+            <div class="mb-12">
+                <span class="text-orange-600 font-bold tracking-[0.2em] text-xs uppercase">Learning Material</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">Thermal Engineering Foundations</h2>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Conduction Card -->
+                <div class="glass-card p-8 lg:col-span-2 group hover:bg-orange-600 transition-all duration-500">
+                    <div class="bg-orange-100 w-12 h-12 rounded-xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
+                        <i class="fa-solid fa-atom text-orange-600 group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 group-hover:text-white transition-colors">Conduction in Solids</h3>
+                    <p class="text-slate-600 group-hover:text-orange-50 mb-8 leading-relaxed">Conduction is the transfer of energy from more energetic particles of a substance to the adjacent less energetic ones as a result of interaction between the particles.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white/50 p-4 rounded-xl border border-slate-100 group-hover:bg-white/10 group-hover:border-transparent transition-all">
+                            <span class="text-[10px] font-bold uppercase block mb-1 opacity-60">Metals</span>
+                            <p class="text-sm font-semibold">High free electron mobility = High conductivity (k).</p>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-blue-50 p-6 rounded-2xl border-t-4 border-blue-400">
-                                <h4 class="font-bold text-blue-900 mb-1">Convection</h4>
-                                <p class="text-xs text-blue-800/70">Fluid motion carrying thermal energy.</p>
-                            </div>
-                            <div class="bg-red-50 p-6 rounded-2xl border-t-4 border-red-400">
-                                <h4 class="font-bold text-red-900 mb-1">Radiation</h4>
-                                <p class="text-xs text-red-800/70">Heat transfer via electromagnetic waves.</p>
-                            </div>
+                        <div class="bg-white/50 p-4 rounded-xl border border-slate-100 group-hover:bg-white/10 group-hover:border-transparent transition-all">
+                            <span class="text-[10px] font-bold uppercase block mb-1 opacity-60">Insulators</span>
+                            <p class="text-sm font-semibold">Low vibration energy transfer = Low conductivity.</p>
                         </div>
                     </div>
-                    <div class="bg-slate-900 p-6 rounded-2xl text-white">
-                        <h3 class="text-lg font-bold mb-4 text-orange-400">Formulas</h3>
-                        <div class="space-y-4 text-center">
-                            <div>
-                                <p class="text-[10px] uppercase text-slate-400 mb-1">Fourier's Law</p>
-                                <p class="text-xl">q = -kA (dT / dx)</p>
-                            </div>
-                            <div class="pt-4 border-t border-slate-700">
-                                <p class="text-[10px] uppercase text-slate-400 mb-1">Thermal Resistance</p>
-                                <p class="text-xl">Rt = L / (kA)</p>
-                            </div>
+                </div>
+
+                <!-- Formula Card -->
+                <div class="bg-slate-900 rounded-[24px] p-8 text-white shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 text-9xl">Σ</div>
+                    <h3 class="text-xl font-bold mb-8 text-orange-400">Core Equations</h3>
+                    <div class="space-y-10">
+                        <div class="relative pl-6 border-l-2 border-orange-500">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Heat Transfer Rate (Q)</span>
+                            <p class="text-2xl engineering-font tracking-tighter">Q_dot = -kA (dT/dx)</p>
+                        </div>
+                        <div class="relative pl-6 border-l-2 border-blue-500">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Thermal Resistance (R_th)</span>
+                            <p class="text-2xl engineering-font tracking-tighter">R_wall = L / (kA)</p>
+                        </div>
+                        <div class="relative pl-6 border-l-2 border-emerald-500">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-1">Composite Wall Flux</span>
+                            <p class="text-2xl engineering-font tracking-tighter">Q_dot = (T_1 - T_2) / ΣR</p>
                         </div>
                     </div>
                 </div>
@@ -137,145 +191,210 @@
 
         <!-- SECTION: VIDEO -->
         <section id="section-video" class="content-section hidden">
-            <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6">Video Lectures</h2>
-                <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-lg">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/lvyCe0UaqJY" frameborder="0" allowfullscreen></iframe>
+            <div class="glass-card p-6 md:p-10 max-w-4xl mx-auto">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center text-white">
+                        <i class="fa-brands fa-youtube text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold">Concept Deep Dive</h2>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Video Lecture Series</p>
+                    </div>
                 </div>
-                <div class="mt-6">
-                    <h3 class="text-xl font-bold text-orange-600">Understanding 3 Modes of Heat Transfer</h3>
-                    <p class="text-slate-500 text-sm mt-2">Watch this video to understand how heat moves in various physical situations.</p>
+                <div class="aspect-video w-full rounded-[24px] overflow-hidden bg-black shadow-2xl">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/lvyCe0UaqJY" frameborder="0" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
 
         <!-- SECTION: SIMULATION -->
         <section id="section-simulation" class="content-section hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Controls -->
-                <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 space-y-6">
-                    <h2 class="text-xl font-bold">Parameters</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Outside Temp (T1): <span id="val-tout" class="text-red-600">35°C</span></label>
-                            <input type="range" id="tout" min="-20" max="100" value="35" class="w-full accent-red-500">
+            <div class="grid lg:grid-cols-12 gap-8">
+                
+                <!-- Left: Control Panel -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="glass-card p-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Boundary & Layers
+                            </h3>
+                            <button onclick="addLayer()" class="text-xs bg-orange-600 text-white px-3 py-1.5 rounded-lg font-bold hover:bg-orange-700 transition-colors">
+                                + Add Layer
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Inside Temp (T2): <span id="val-tin" class="text-blue-600">22°C</span></label>
-                            <input type="range" id="tin" min="10" max="40" value="22" class="w-full accent-blue-500">
-                        </div>
-                        <div class="pt-4 border-t border-slate-100">
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Material</label>
-                            <select id="material" class="w-full p-3 bg-slate-50 border rounded-xl mb-4 text-sm">
-                                <option value="0.7">Brick (k=0.7)</option>
-                                <option value="1.5">Concrete (k=1.5)</option>
-                                <option value="0.04">Insulation (k=0.04)</option>
-                                <option value="200">Aluminum (k=200)</option>
-                            </select>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Thickness: <span id="val-thick">0.30m</span></label>
-                            <input type="range" id="thickness" min="0.05" max="1.0" step="0.05" value="0.30" class="w-full accent-slate-800">
+
+                        <div class="space-y-6">
+                            <!-- Temp Controls -->
+                            <div class="bg-slate-50 p-4 rounded-xl space-y-4">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_outside</label>
+                                        <span id="v-t1" class="text-red-600 font-bold engineering-font">40°C</span>
+                                    </div>
+                                    <input type="range" id="t1" min="20" max="150" value="40" class="w-full">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_inside</label>
+                                        <span id="v-t2" class="text-blue-600 font-bold engineering-font">20°C</span>
+                                    </div>
+                                    <input type="range" id="t2" min="0" max="35" value="20" class="w-full">
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Layers Area -->
+                            <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                <!-- Layers will be injected here -->
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-900 p-6 rounded-2xl text-white">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[10px] text-slate-400 uppercase">Heat Rate (q)</span>
-                            <span id="res-flux" class="font-bold text-orange-400 text-lg">--</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] text-slate-400 uppercase">Resistance (Rt)</span>
-                            <span id="res-rval" class="font-bold text-emerald-400">--</span>
+
+                    <!-- Readout Panel -->
+                    <div class="bg-slate-900 rounded-[24px] p-8 text-white">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Total ΣR</span>
+                                <p id="out-r" class="text-2xl font-bold engineering-font text-emerald-400">0.000</p>
+                                <span class="text-[9px] text-slate-500 uppercase">K/W</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Flux q''</span>
+                                <p id="out-q" class="text-2xl font-bold engineering-font text-orange-400">0.0</p>
+                                <span class="text-[9px] text-slate-500 uppercase">W/m²</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Visuals -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
-                        <div class="h-24 md:h-32 w-full rounded-xl overflow-hidden flex border mb-6">
-                            <div id="outside-visual" class="w-16 md:w-24 bg-red-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Outside</div>
-                            <div id="wall-visual" class="flex-1 gradient-wall"></div>
-                            <div id="inside-visual" class="w-16 md:w-24 bg-blue-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Inside</div>
+                <!-- Right: Visualizer & Circuit -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="glass-card p-8">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                            <h3 class="font-bold">Composite Temperature Profile</h3>
+                            <div id="material-legend" class="flex flex-wrap gap-3">
+                                <!-- Legend injected here -->
+                            </div>
                         </div>
-                        <div class="h-48 md:h-64 w-full">
+                        
+                        <div class="relative h-64 md:h-80 mb-12">
                             <canvas id="tempChart"></canvas>
                         </div>
-                    </div>
-                    <!-- Analogy Box -->
-                    <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
-                        <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-4">Circuit Analogy</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
-                                <span class="text-xs font-bold">Thermal (dT = q*Rt)</span>
-                                <div class="flex items-center gap-1">
-                                    <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                    <div class="thermal-resistor"></div>
-                                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                                </div>
+
+                        <!-- DYNAMIC THERMAL CIRCUIT -->
+                        <div class="pt-8 border-t border-slate-100">
+                            <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 text-center underline decoration-orange-500 underline-offset-8">Thermal Resistance Network Analogy</h4>
+                            <div id="circuit-visualizer" class="max-w-3xl mx-auto flex items-center justify-center gap-0 px-4 overflow-x-auto pb-4">
+                                <!-- Nodes and resistors injected here -->
                             </div>
-                            <div class="p-4 bg-yellow-50 rounded-xl flex items-center justify-between">
-                                <span class="text-xs font-bold">Electrical (V = I*R)</span>
-                                <div class="flex items-center gap-1">
-                                    <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                    <div class="electric-resistor"></div>
-                                    <div class="w-2 h-2 rounded-full bg-slate-800"></div>
+                            <div class="text-center mt-8">
+                                <div class="inline-block bg-orange-50 px-6 py-2 rounded-full border border-orange-100">
+                                    <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Ohm's Law Analogy: Q_dot = (T_hot - T_cold) / R_total</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
         <!-- SECTION: QUIZ -->
         <section id="section-quiz" class="content-section hidden">
-            <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100 max-w-2xl mx-auto">
-                <div id="quiz-header" class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl md:text-2xl font-bold">10-Question Test</h2>
-                    <span id="quiz-progress" class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">1 / 10</span>
+            <div class="glass-card p-10 max-w-2xl mx-auto">
+                <div id="quiz-header" class="flex justify-between items-center mb-10 pb-6 border-b">
+                    <div>
+                        <h2 class="text-2xl font-black">Engineering Assessment</h2>
+                        <p class="text-xs text-slate-400 font-bold uppercase mt-1">Conduction & Multi-Layer Surfaces</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full border-4 border-orange-500 flex items-center justify-center font-black" id="quiz-timer">1 / 10</div>
                 </div>
                 <div id="quiz-content" class="min-h-[300px]"></div>
                 <div id="quiz-result" class="hidden text-center py-10">
-                    <div class="text-5xl font-black text-orange-600 mb-4" id="final-score-text">0/10</div>
-                    <p class="text-slate-500 mb-6">Your score has been recorded.</p>
-                    <button onclick="startNewQuiz()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold w-full">Restart Quiz</button>
+                    <div class="text-7xl font-black text-orange-600 mb-6" id="final-score">0/10</div>
+                    <h4 class="text-xl font-bold mb-2">Simulation Complete</h4>
+                    <p class="text-slate-500 mb-8">Thermal dynamics results processed.</p>
+                    <button onclick="startQuiz()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-bold hover:scale-105 transition-all">Re-run Assessment</button>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Responsive Navigation Logic
-        function showSection(sectionId) {
-            // Hide all sections
+        // Materials Database
+        const materials = [
+            { name: "Brick", k: 0.8, color: "#94a3b8" },
+            { name: "Concrete", k: 1.4, color: "#64748b" },
+            { name: "Wood", k: 0.15, color: "#b45309" },
+            { name: "Glass Fiber", k: 0.04, color: "#38bdf8" },
+            { name: "Steel", k: 50, color: "#1e293b" }
+        ];
+
+        // State Management
+        let chart;
+        let layers = [
+            { materialIdx: 0, thickness: 0.10 },
+            { materialIdx: 3, thickness: 0.05 }
+        ];
+
+        function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
-            document.getElementById('section-' + sectionId).classList.remove('hidden');
-
-            // Reset desktop nav
-            document.querySelectorAll('.d-nav').forEach(l => l.classList.remove('active-tab-desktop', 'text-orange-600'));
-            const desktopLink = document.getElementById('d-nav-' + sectionId);
-            if(desktopLink) desktopLink.classList.add('active-tab-desktop', 'text-orange-600');
-
-            // Reset mobile nav
-            document.querySelectorAll('.m-nav').forEach(l => l.classList.remove('active-tab-mobile', 'text-orange-600'));
-            const mobileLink = document.getElementById('m-nav-' + sectionId);
-            if(mobileLink) mobileLink.classList.add('active-tab-mobile', 'text-orange-600');
-
-            // Handle Chart resizing
-            if (sectionId === 'simulation' && chart) {
-                setTimeout(() => { chart.resize(); chart.update(); }, 100);
-            }
-            
-            // Scroll to top on change
+            document.getElementById('section-' + id).classList.remove('hidden');
+            document.querySelectorAll('.d-nav').forEach(n => n.classList.remove('nav-item-active-d', 'text-orange-600'));
+            document.getElementById('d-nav-' + id).classList.add('nav-item-active-d', 'text-orange-600');
+            document.querySelectorAll('.m-nav').forEach(n => n.classList.remove('nav-item-active-m', 'text-orange-600'));
+            document.getElementById('m-nav-' + id).classList.add('nav-item-active-m', 'text-orange-600');
+            if (id === 'simulation' && !chart) initChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- Simulation Logic ---
-        const toutIn = document.getElementById('tout');
-        const tinIn = document.getElementById('tin');
-        const thickIn = document.getElementById('thickness');
-        const matSel = document.getElementById('material');
-        let chart;
+        // --- Multi-Layer Logic ---
+        function renderLayers() {
+            const container = document.getElementById('layers-container');
+            container.innerHTML = '';
+            layers.forEach((layer, idx) => {
+                const div = document.createElement('div');
+                div.className = 'p-4 bg-white rounded-xl border border-slate-200 shadow-sm relative group';
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-black text-slate-400 uppercase">Layer ${idx + 1}</span>
+                        ${layers.length > 1 ? `<button onclick="removeLayer(${idx})" class="text-slate-300 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <select onchange="updateLayerMaterial(${idx}, this.value)" class="text-xs font-bold p-2 rounded-lg bg-slate-50 border-none outline-none">
+                            ${materials.map((m, i) => `<option value="${i}" ${layer.materialIdx == i ? 'selected' : ''}>${m.name}</option>`).join('')}
+                        </select>
+                        <div class="text-right text-[10px] font-bold text-orange-600 engineering-font">${layer.thickness.toFixed(2)}m</div>
+                    </div>
+                    <input type="range" min="0.01" max="0.5" step="0.01" value="${layer.thickness}" 
+                        oninput="updateLayerThickness(${idx}, this.value)" class="w-full">
+                `;
+                container.appendChild(div);
+            });
+            updateSimulation();
+        }
 
+        function addLayer() {
+            if (layers.length >= 5) return;
+            layers.push({ materialIdx: 0, thickness: 0.10 });
+            renderLayers();
+        }
+
+        function removeLayer(idx) {
+            layers.splice(idx, 1);
+            renderLayers();
+        }
+
+        function updateLayerMaterial(idx, val) {
+            layers[idx].materialIdx = parseInt(val);
+            updateSimulation();
+        }
+
+        function updateLayerThickness(idx, val) {
+            layers[idx].thickness = parseFloat(val);
+            renderLayers();
+        }
+
+        // --- Simulation Core ---
         function initChart() {
             const ctx = document.getElementById('tempChart').getContext('2d');
             chart = new Chart(ctx, {
@@ -283,119 +402,173 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Temperature',
+                        label: 'Temperature Profile',
                         data: [],
                         borderColor: '#f97316',
-                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        backgroundColor: (ctx) => {
+                            const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
+                            gradient.addColorStop(0, 'rgba(249, 115, 22, 0.4)');
+                            gradient.addColorStop(1, 'rgba(249, 115, 22, 0)');
+                            return gradient;
+                        },
                         fill: true,
-                        tension: 0
+                        tension: 0,
+                        pointRadius: 6,
+                        pointHoverRadius: 10,
+                        pointBackgroundColor: '#fff',
+                        pointBorderWidth: 4,
+                        borderWidth: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { min: -25, max: 105, ticks: { font: { size: 10 } } },
-                        x: { ticks: { font: { size: 8 } } }
+                        y: { min: 0, max: 160, title: { display: true, text: 'Temp (°C)', font: { weight: 'bold' } } },
+                        x: { grid: { display: false } }
                     },
                     plugins: { legend: { display: false } }
                 }
             });
+            renderLayers();
         }
 
-        function updateSim() {
-            const T1 = parseFloat(toutIn.value);
-            const T2 = parseFloat(tinIn.value);
-            const L = parseFloat(thickIn.value);
-            const k = parseFloat(matSel.value);
+        function updateSimulation() {
+            const T1 = parseFloat(document.getElementById('t1').value);
+            const T2 = parseFloat(document.getElementById('t2').value);
+            document.getElementById('v-t1').innerText = T1 + '°C';
+            document.getElementById('v-t2').innerText = T2 + '°C';
+
+            let Rtotal = 0;
+            let resistances = [];
             
-            document.getElementById('val-tout').innerText = `${T1}°C`;
-            document.getElementById('val-tin').innerText = `${T2}°C`;
-            document.getElementById('val-thick').innerText = `${L.toFixed(2)}m`;
+            // Calculate Resistance for each layer
+            layers.forEach(layer => {
+                const k = materials[layer.materialIdx].k;
+                const R = layer.thickness / (k * 1.0); // Assuming Area A = 1
+                Rtotal += R;
+                resistances.push(R);
+            });
 
-            const Rt = L / (k * 1.0);
-            const q = (T1 - T2) / Rt;
+            const qFlux = (T1 - T2) / Rtotal;
+            
+            // Calculate interface temperatures
+            let currentT = T1;
+            let tempData = [T1];
+            let labels = ['T_out'];
+            
+            layers.forEach((layer, i) => {
+                currentT = currentT - (qFlux * resistances[i]);
+                tempData.push(currentT);
+                labels.push(i === layers.length - 1 ? 'T_in' : `T_int ${i+1}`);
+            });
 
-            document.getElementById('res-flux').innerText = `${Math.abs(q).toFixed(1)} W`;
-            document.getElementById('res-rval').innerText = `${Rt.toFixed(3)} K/W`;
+            // Update UI
+            document.getElementById('out-r').innerText = Rtotal.toFixed(3);
+            document.getElementById('out-q').innerText = qFlux.toFixed(1);
+            
+            // Update Legend
+            const legend = document.getElementById('material-legend');
+            legend.innerHTML = layers.map(l => `
+                <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-slate-100 text-[10px] font-bold">
+                    <div class="w-2 h-2 rounded-full" style="background:${materials[l.materialIdx].color}"></div>
+                    ${materials[l.materialIdx].name}
+                </div>
+            `).join('');
 
-            // Gradient update
-            const getC = (t) => `rgb(${Math.floor(255*(t+20)/120)}, 100, ${Math.floor(255*(1-(t+20)/120))})`;
-            const wall = document.getElementById('wall-visual');
-            wall.style.setProperty('--outside-color', getC(T1));
-            wall.style.setProperty('--inside-color', getC(T2));
+            // Update Circuit Visualizer
+            const circuit = document.getElementById('circuit-visualizer');
+            circuit.innerHTML = '';
+            
+            // Start node
+            circuit.innerHTML += `
+                <div class="flex flex-col items-center gap-1">
+                    <div class="node bg-red-500 shadow-[0_0_8px_red]"></div>
+                    <span class="text-[8px] font-bold engineering-font">T_out</span>
+                </div>
+            `;
+            
+            layers.forEach((layer, i) => {
+                circuit.innerHTML += `
+                    <div class="resistor-line flex items-center justify-center">
+                        <div class="resistor-zigzag"></div>
+                        <span class="absolute -top-5 text-[8px] font-bold text-slate-400">R${i+1}</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                        <div class="node ${i === layers.length - 1 ? 'bg-blue-500 shadow-[0_0_8px_blue]' : ''}"></div>
+                        <span class="text-[8px] font-bold engineering-font">${i === layers.length - 1 ? 'T_in' : `T_i${i+1}`}</span>
+                    </div>
+                `;
+            });
 
-            // Chart update
-            const data = []; const labels = [];
-            for(let i=0; i<=5; i++) {
-                labels.push((i*L/5).toFixed(2));
-                data.push((T1 + (T2-T1)*(i/5)).toFixed(1));
+            if (chart) {
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = tempData;
+                chart.update('none');
             }
-            chart.data.labels = labels;
-            chart.data.datasets[0].data = data;
-            chart.update('none');
         }
+
+        // Listeners for boundary temps
+        document.getElementById('t1').addEventListener('input', updateSimulation);
+        document.getElementById('t2').addEventListener('input', updateSimulation);
 
         // --- Quiz Logic ---
-        const bank = [
-            { q: "Metals are good thermal conductors because...", o: ["They have vacuum", "They have free electrons", "Their temperature is always high", "They have no density"], c: 1 },
-            { q: "The direction of heat flow is from...", o: ["Cold to Hot", "Left to Right", "Hot to Cold", "Top to Bottom"], c: 2 },
-            { q: "The unit for thermal resistance (Rt) is...", o: ["Watt", "K/W", "Joule", "Pascal"], c: 1 },
-            { q: "Insulating materials have a 'k' value that is...", o: ["Very Large", "Negative", "Very Small", "Equal to 100"], c: 2 },
-            { q: "Increasing thickness (L) will cause Rt to...", o: ["Increase", "Decrease", "Disappear", "Remain the same"], c: 0 },
-            { q: "Heat from the sun reaches Earth via...", o: ["Conduction", "Convection", "Radiation", "Contact"], c: 2 },
-            { q: "The analogy of Electric Current (I) in thermal terms is...", o: ["Temperature Difference", "Heat Rate (q)", "Area (A)", "Thickness"], c: 1 },
-            { q: "Brick (k=0.7) vs Aluminum (k=200). Which feels cooler when touched simultaneously in a hot environment?", o: ["Brick", "Aluminum", "Both the same", "No answer"], c: 0 },
-            { q: "Fourier's Law formula is...", o: ["V=IR", "q = -kA(dT/dx)", "F=ma", "E=mc2"], c: 1 },
-            { q: "In a vacuum, heat transfer occurs via...", o: ["Convection only", "Conduction only", "Radiation only", "All of the above"], c: 2 }
+        const engineeringQuestions = [
+            { q: "What is the unit of Thermal Conductivity (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
+            { q: "In a composite wall, which parameter remains constant across all layers at steady state?", o: ["Temperature Drop", "Heat Rate (Q_dot)", "Thermal Resistance", "None"], c: 1 },
+            { q: "Adding insulation to a flat wall ALWAYS increases thermal resistance.", o: ["True", "False", "Only in vacuum", "Only for metals"], c: 0 },
+            { q: "Thermal resistance is analogous to which electrical component?", o: ["Capacitor", "Inductor", "Resistor", "Diode"], c: 2 },
+            { q: "Fourier's Law states that heat flux is proportional to...", o: ["Pressure", "Density", "Temperature Gradient", "Volume"], c: 2 },
+            { q: "Which material typically has the highest 'k' value?", o: ["Wood", "Air", "Copper", "Concrete"], c: 2 },
+            { q: "Conduction heat transfer requires a medium.", o: ["True", "False", "Only in space", "Depends on color"], c: 0 },
+            { q: "Steady-state implies that temperature at any point...", o: ["Decreases", "Increases", "Does not change with time", "Is always zero"], c: 2 },
+            { q: "The 'minus' sign in Fourier's Law signifies...", o: ["Heat loss", "Heat flow opposite to temp gradient", "Math error", "Vacuum state"], c: 1 },
+            { q: "A composite wall with 3 layers will have how many nodes in its thermal circuit?", o: ["2", "3", "4", "5"], c: 2 }
         ];
 
-        let curIdx = 0, score = 0, selected = null;
-
-        function startNewQuiz() {
-            curIdx = 0; score = 0; selected = null;
+        let qIdx = 0, qScore = 0, qSelect = null;
+        function startQuiz() {
+            qIdx = 0; qScore = 0; qSelect = null;
             document.getElementById('quiz-result').classList.add('hidden');
             document.getElementById('quiz-header').classList.remove('hidden');
             document.getElementById('quiz-content').classList.remove('hidden');
-            renderQ();
+            renderQuestion();
         }
-
-        function renderQ() {
-            const cont = document.getElementById('quiz-content');
-            const data = bank[curIdx];
-            document.getElementById('quiz-progress').innerText = `${curIdx + 1} / 10`;
-            cont.innerHTML = `
-                <p class="text-lg font-bold mb-6">${data.q}</p>
-                <div class="space-y-3">
+        function renderQuestion() {
+            const data = engineeringQuestions[qIdx];
+            document.getElementById('quiz-timer').innerText = (qIdx + 1);
+            document.getElementById('quiz-content').innerHTML = `
+                <p class="text-xl font-bold mb-8 text-slate-800 leading-relaxed">${data.q}</p>
+                <div class="grid gap-4">
                     ${data.o.map((opt, i) => `
-                        <button onclick="selected=${i}; updateQuizUI()" id="opt-${i}" class="quiz-opt w-full text-left p-4 rounded-xl border-2 border-slate-100 hover:border-orange-200 transition-all font-medium text-sm">
+                        <button onclick="qSelect=${i}; updateQuizUI()" id="q-opt-${i}" class="q-btn w-full text-left p-5 rounded-2xl border-2 border-slate-100 hover:border-orange-300 transition-all font-semibold">
                             ${opt}
                         </button>
                     `).join('')}
                 </div>
-                <button onclick="submitAns()" class="mt-8 w-full bg-orange-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-orange-100">Next</button>
+                <button onclick="nextQ()" class="mt-10 w-full bg-orange-600 text-white py-5 rounded-2xl font-black shadow-xl shadow-orange-200 active:scale-95 transition-transform">SUBMIT ANSWER</button>
             `;
         }
-
         function updateQuizUI() {
-            document.querySelectorAll('.quiz-opt').forEach(b => b.classList.remove('border-orange-500', 'bg-orange-50'));
-            document.getElementById(`opt-${selected}`).classList.add('border-orange-500', 'bg-orange-50');
+            document.querySelectorAll('.q-btn').forEach(b => b.classList.remove('border-orange-500', 'bg-orange-50', 'text-orange-900'));
+            document.getElementById(`q-opt-${qSelect}`).classList.add('border-orange-500', 'bg-orange-50', 'text-orange-900');
         }
-
-        function submitAns() {
-            if(selected === null) return;
-            if(selected === bank[curIdx].c) score++;
-            if(curIdx < 9) { curIdx++; selected=null; renderQ(); }
-            else { 
+        function nextQ() {
+            if(qSelect === null) return;
+            if(qSelect === engineeringQuestions[qIdx].c) qScore++;
+            if(qIdx < 9) { qIdx++; qSelect=null; renderQuestion(); }
+            else {
                 document.getElementById('quiz-content').classList.add('hidden');
                 document.getElementById('quiz-header').classList.add('hidden');
                 document.getElementById('quiz-result').classList.remove('hidden');
-                document.getElementById('final-score-text').innerText = `${score}/10`;
+                document.getElementById('final-score').innerText = qScore + "/10";
             }
         }
 
-        [toutIn, tinIn, thickIn, matSel].forEach(e => e.addEventListener('input', updateSim));
-        window.onload = () => { initChart(); updateSim(); startNewQuiz(); };
+        window.onload = () => {
+            showSection('notes');
+            startQuiz();
+        };
     </script>
 </body>
 </html>
