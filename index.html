@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeatMaster Pro | E-Learning Responsif</title>
+    <title>HeatMaster Pro | Responsive E-Learning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -12,7 +12,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8fafc;
-            padding-bottom: 80px; /* Ruang untuk mobile nav */
+            padding-bottom: 80px; /* Space for mobile nav */
         }
 
         @media (min-width: 768px) {
@@ -64,10 +64,10 @@
                     <span class="text-xl font-bold">HeatMaster <span class="text-orange-600">Pro</span></span>
                 </div>
                 <div class="flex space-x-8 h-full">
-                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav py-7 px-1 font-semibold active-tab-desktop">Nota</button>
-                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav py-7 px-1 font-semibold text-slate-500">Kuliah</button>
-                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav py-7 px-1 font-semibold text-slate-500">Makmal</button>
-                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav py-7 px-1 font-semibold text-slate-500">Ujian</button>
+                    <button onclick="showSection('notes')" id="d-nav-notes" class="d-nav py-7 px-1 font-semibold active-tab-desktop">Notes</button>
+                    <button onclick="showSection('video')" id="d-nav-video" class="d-nav py-7 px-1 font-semibold text-slate-500">Lectures</button>
+                    <button onclick="showSection('simulation')" id="d-nav-simulation" class="d-nav py-7 px-1 font-semibold text-slate-500">Lab</button>
+                    <button onclick="showSection('quiz')" id="d-nav-quiz" class="d-nav py-7 px-1 font-semibold text-slate-500">Quiz</button>
                 </div>
             </div>
         </div>
@@ -78,19 +78,19 @@
         <div class="flex justify-around items-center">
             <button onclick="showSection('notes')" id="m-nav-notes" class="m-nav flex flex-col items-center gap-1 p-2 active-tab-mobile w-full">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Nota</span>
+                <span class="text-[10px] font-bold uppercase">Notes</span>
             </button>
             <button onclick="showSection('video')" id="m-nav-video" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Kuliah</span>
+                <span class="text-[10px] font-bold uppercase">Lectures</span>
             </button>
             <button onclick="showSection('simulation')" id="m-nav-simulation" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.618.309a6 6 0 00-3.414 3.414l-.309.618a6 6 0 00-.517 3.86l.477 2.387a2 2 0 00.547 1.022l1.414 1.414a2 2 0 001.022.547l2.387.477a6 6 0 003.86-.517l.618-.309a6 6 0 003.414-3.414l.309-.618a6 6 0 00.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.414-1.414z"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Makmal</span>
+                <span class="text-[10px] font-bold uppercase">Lab</span>
             </button>
             <button onclick="showSection('quiz')" id="m-nav-quiz" class="m-nav flex flex-col items-center gap-1 p-2 text-slate-400 w-full">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                <span class="text-[10px] font-bold uppercase">Ujian</span>
+                <span class="text-[10px] font-bold uppercase">Quiz</span>
             </button>
         </div>
     </nav>
@@ -100,33 +100,33 @@
         <!-- SECTION: NOTES -->
         <section id="section-notes" class="content-section">
             <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100">
-                <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Dasar Pemindahan Haba</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6">Heat Transfer Fundamentals</h2>
                 <div class="grid lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2 space-y-6">
                         <div class="bg-slate-50 p-6 rounded-2xl border-l-8 border-orange-500">
-                            <h3 class="text-xl font-bold mb-2">Konduksi (Conduction)</h3>
-                            <p class="text-slate-600 text-sm md:text-base">Berlaku melalui interaksi zarah dalam pepejal. Logam adalah konduktor terbaik kerana elektron bebas.</p>
+                            <h3 class="text-xl font-bold mb-2">Conduction</h3>
+                            <p class="text-slate-600 text-sm md:text-base">Occurs through molecular interaction in solids. Metals are excellent conductors due to free electrons.</p>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="bg-blue-50 p-6 rounded-2xl border-t-4 border-blue-400">
-                                <h4 class="font-bold text-blue-900 mb-1">Konveksi</h4>
-                                <p class="text-xs text-blue-800/70">Pergerakan bendalir membawa tenaga haba.</p>
+                                <h4 class="font-bold text-blue-900 mb-1">Convection</h4>
+                                <p class="text-xs text-blue-800/70">Fluid motion carrying thermal energy.</p>
                             </div>
                             <div class="bg-red-50 p-6 rounded-2xl border-t-4 border-red-400">
-                                <h4 class="font-bold text-red-900 mb-1">Radiasi</h4>
-                                <p class="text-xs text-red-800/70">Haba berpindah melalui gelombang elektromagnet.</p>
+                                <h4 class="font-bold text-red-900 mb-1">Radiation</h4>
+                                <p class="text-xs text-red-800/70">Heat transfer via electromagnetic waves.</p>
                             </div>
                         </div>
                     </div>
                     <div class="bg-slate-900 p-6 rounded-2xl text-white">
-                        <h3 class="text-lg font-bold mb-4 text-orange-400">Formula</h3>
+                        <h3 class="text-lg font-bold mb-4 text-orange-400">Formulas</h3>
                         <div class="space-y-4 text-center">
                             <div>
-                                <p class="text-[10px] uppercase text-slate-400 mb-1">Hukum Fourier</p>
+                                <p class="text-[10px] uppercase text-slate-400 mb-1">Fourier's Law</p>
                                 <p class="text-xl">q = -kA (dT / dx)</p>
                             </div>
                             <div class="pt-4 border-t border-slate-700">
-                                <p class="text-[10px] uppercase text-slate-400 mb-1">Rintangan Terma</p>
+                                <p class="text-[10px] uppercase text-slate-400 mb-1">Thermal Resistance</p>
                                 <p class="text-xl">Rt = L / (kA)</p>
                             </div>
                         </div>
@@ -138,13 +138,13 @@
         <!-- SECTION: VIDEO -->
         <section id="section-video" class="content-section hidden">
             <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6">Kuliah Video</h2>
+                <h2 class="text-2xl md:text-3xl font-bold mb-6">Video Lectures</h2>
                 <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-lg">
                     <iframe class="w-full h-full" src="https://www.youtube.com/embed/lvyCe0UaqJY" frameborder="0" allowfullscreen></iframe>
                 </div>
                 <div class="mt-6">
-                    <h3 class="text-xl font-bold text-orange-600">Mengenali 3 Kaedah Haba</h3>
-                    <p class="text-slate-500 text-sm mt-2">Tonton video ini untuk memahami bagaimana haba berpindah dalam pelbagai situasi fizikal.</p>
+                    <h3 class="text-xl font-bold text-orange-600">Understanding 3 Modes of Heat Transfer</h3>
+                    <p class="text-slate-500 text-sm mt-2">Watch this video to understand how heat moves in various physical situations.</p>
                 </div>
             </div>
         </section>
@@ -154,35 +154,35 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Controls -->
                 <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 space-y-6">
-                    <h2 class="text-xl font-bold">Parameter</h2>
+                    <h2 class="text-xl font-bold">Parameters</h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Suhu Luar (T1): <span id="val-tout" class="text-red-600">35°C</span></label>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Outside Temp (T1): <span id="val-tout" class="text-red-600">35°C</span></label>
                             <input type="range" id="tout" min="-20" max="100" value="35" class="w-full accent-red-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Suhu Dalam (T2): <span id="val-tin" class="text-blue-600">22°C</span></label>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Inside Temp (T2): <span id="val-tin" class="text-blue-600">22°C</span></label>
                             <input type="range" id="tin" min="10" max="40" value="22" class="w-full accent-blue-500">
                         </div>
                         <div class="pt-4 border-t border-slate-100">
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Bahan</label>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Material</label>
                             <select id="material" class="w-full p-3 bg-slate-50 border rounded-xl mb-4 text-sm">
-                                <option value="0.7">Batu Bata (k=0.7)</option>
-                                <option value="1.5">Konkrit (k=1.5)</option>
-                                <option value="0.04">Penebat (k=0.04)</option>
-                                <option value="200">Aluminium (k=200)</option>
+                                <option value="0.7">Brick (k=0.7)</option>
+                                <option value="1.5">Concrete (k=1.5)</option>
+                                <option value="0.04">Insulation (k=0.04)</option>
+                                <option value="200">Aluminum (k=200)</option>
                             </select>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Ketebalan: <span id="val-thick">0.30m</span></label>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Thickness: <span id="val-thick">0.30m</span></label>
                             <input type="range" id="thickness" min="0.05" max="1.0" step="0.05" value="0.30" class="w-full accent-slate-800">
                         </div>
                     </div>
                     <div class="bg-slate-900 p-6 rounded-2xl text-white">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-[10px] text-slate-400 uppercase">Kadar Haba (q)</span>
+                            <span class="text-[10px] text-slate-400 uppercase">Heat Rate (q)</span>
                             <span id="res-flux" class="font-bold text-orange-400 text-lg">--</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] text-slate-400 uppercase">Rintangan (Rt)</span>
+                            <span class="text-[10px] text-slate-400 uppercase">Resistance (Rt)</span>
                             <span id="res-rval" class="font-bold text-emerald-400">--</span>
                         </div>
                     </div>
@@ -192,9 +192,9 @@
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
                         <div class="h-24 md:h-32 w-full rounded-xl overflow-hidden flex border mb-6">
-                            <div id="outside-visual" class="w-16 md:w-24 bg-red-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Luar</div>
+                            <div id="outside-visual" class="w-16 md:w-24 bg-red-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Outside</div>
                             <div id="wall-visual" class="flex-1 gradient-wall"></div>
-                            <div id="inside-visual" class="w-16 md:w-24 bg-blue-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Dalam</div>
+                            <div id="inside-visual" class="w-16 md:w-24 bg-blue-500 flex items-center justify-center text-[8px] font-black text-white uppercase">Inside</div>
                         </div>
                         <div class="h-48 md:h-64 w-full">
                             <canvas id="tempChart"></canvas>
@@ -202,10 +202,10 @@
                     </div>
                     <!-- Analogy Box -->
                     <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
-                        <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-4">Analogi Litar</h3>
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-4">Circuit Analogy</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
-                                <span class="text-xs font-bold">Terma (dT = q*Rt)</span>
+                                <span class="text-xs font-bold">Thermal (dT = q*Rt)</span>
                                 <div class="flex items-center gap-1">
                                     <div class="w-2 h-2 rounded-full bg-red-500"></div>
                                     <div class="thermal-resistor"></div>
@@ -213,7 +213,7 @@
                                 </div>
                             </div>
                             <div class="p-4 bg-yellow-50 rounded-xl flex items-center justify-between">
-                                <span class="text-xs font-bold">Elektrik (V = I*R)</span>
+                                <span class="text-xs font-bold">Electrical (V = I*R)</span>
                                 <div class="flex items-center gap-1">
                                     <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
                                     <div class="electric-resistor"></div>
@@ -230,14 +230,14 @@
         <section id="section-quiz" class="content-section hidden">
             <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl border border-slate-100 max-w-2xl mx-auto">
                 <div id="quiz-header" class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl md:text-2xl font-bold">Ujian 10 Soalan</h2>
+                    <h2 class="text-xl md:text-2xl font-bold">10-Question Test</h2>
                     <span id="quiz-progress" class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold">1 / 10</span>
                 </div>
                 <div id="quiz-content" class="min-h-[300px]"></div>
                 <div id="quiz-result" class="hidden text-center py-10">
                     <div class="text-5xl font-black text-orange-600 mb-4" id="final-score-text">0/10</div>
-                    <p class="text-slate-500 mb-6">Markah anda telah direkodkan.</p>
-                    <button onclick="startNewQuiz()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold w-full">Ulang Kuiz</button>
+                    <p class="text-slate-500 mb-6">Your score has been recorded.</p>
+                    <button onclick="startNewQuiz()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold w-full">Restart Quiz</button>
                 </div>
             </div>
         </section>
@@ -283,7 +283,7 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Suhu',
+                        label: 'Temperature',
                         data: [],
                         borderColor: '#f97316',
                         backgroundColor: 'rgba(249, 115, 22, 0.1)',
@@ -338,16 +338,16 @@
 
         // --- Quiz Logic ---
         const bank = [
-            { q: "Logam adalah konduktor haba yang baik kerana...", o: ["Ada vakum", "Ada elektron bebas", "Suhu sentiasa tinggi", "Tiada ketumpatan"], c: 1 },
-            { q: "Arah aliran haba adalah dari...", o: ["Sejuk ke Panas", "Kiri ke Kanan", "Panas ke Sejuk", "Atas ke Bawah"], c: 2 },
-            { q: "Unit bagi rintangan terma (Rt) ialah...", o: ["Watt", "K/W", "Joule", "Pascal"], c: 1 },
-            { q: "Bahan penebat mempunyai nilai 'k' yang...", o: ["Sangat Besar", "Negatif", "Sangat Kecil", "Sama dengan 100"], c: 2 },
-            { q: "Peningkatan ketebalan (L) akan menyebabkan Rt...", o: ["Meningkat", "Menurun", "Hilang", "Kekal"], c: 0 },
-            { q: "Haba dari matahari sampai ke bumi melalui...", o: ["Konduksi", "Konveksi", "Radiasi", "Sentuhan"], c: 2 },
-            { q: "Analogi Arus Elektrik (I) dalam terma ialah...", o: ["Perbezaan Suhu", "Kadar Haba (q)", "Luas (A)", "Ketebalan"], c: 1 },
-            { q: "Batu bata k=0.7 berbanding Aluminium k=200. Mana lebih sejuk jika disentuh serentak pada suhu panas?", o: ["Batu Bata", "Aluminium", "Sama sahaja", "Tiada jawapan"], c: 0 },
-            { q: "Formula Hukum Fourier ialah...", o: ["V=IR", "q = -kA(dT/dx)", "F=ma", "E=mc2"], c: 1 },
-            { q: "Dalam vakum, pemindahan haba berlaku secara...", o: ["Konveksi sahaja", "Konduksi sahaja", "Radiasi sahaja", "Semua di atas"], c: 2 }
+            { q: "Metals are good thermal conductors because...", o: ["They have vacuum", "They have free electrons", "Their temperature is always high", "They have no density"], c: 1 },
+            { q: "The direction of heat flow is from...", o: ["Cold to Hot", "Left to Right", "Hot to Cold", "Top to Bottom"], c: 2 },
+            { q: "The unit for thermal resistance (Rt) is...", o: ["Watt", "K/W", "Joule", "Pascal"], c: 1 },
+            { q: "Insulating materials have a 'k' value that is...", o: ["Very Large", "Negative", "Very Small", "Equal to 100"], c: 2 },
+            { q: "Increasing thickness (L) will cause Rt to...", o: ["Increase", "Decrease", "Disappear", "Remain the same"], c: 0 },
+            { q: "Heat from the sun reaches Earth via...", o: ["Conduction", "Convection", "Radiation", "Contact"], c: 2 },
+            { q: "The analogy of Electric Current (I) in thermal terms is...", o: ["Temperature Difference", "Heat Rate (q)", "Area (A)", "Thickness"], c: 1 },
+            { q: "Brick (k=0.7) vs Aluminum (k=200). Which feels cooler when touched simultaneously in a hot environment?", o: ["Brick", "Aluminum", "Both the same", "No answer"], c: 0 },
+            { q: "Fourier's Law formula is...", o: ["V=IR", "q = -kA(dT/dx)", "F=ma", "E=mc2"], c: 1 },
+            { q: "In a vacuum, heat transfer occurs via...", o: ["Convection only", "Conduction only", "Radiation only", "All of the above"], c: 2 }
         ];
 
         let curIdx = 0, score = 0, selected = null;
@@ -373,7 +373,7 @@
                         </button>
                     `).join('')}
                 </div>
-                <button onclick="submitAns()" class="mt-8 w-full bg-orange-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-orange-100">Seterusnya</button>
+                <button onclick="submitAns()" class="mt-8 w-full bg-orange-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-orange-100">Next</button>
             `;
         }
 
