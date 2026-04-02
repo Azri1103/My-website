@@ -208,7 +208,7 @@
                             <div class="bg-slate-50 p-4 rounded-xl space-y-4">
                                 <div>
                                     <div class="flex justify-between mb-1">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Outer (Hot)</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Outer (Hot Side)</label>
                                         <div class="flex items-center gap-1">
                                             <input type="number" id="in-t1" min="20" max="150" value="40" 
                                                 oninput="syncTemperature('t1', this.value)"
@@ -220,7 +220,7 @@
                                 </div>
                                 <div>
                                     <div class="flex justify-between mb-1">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Inner (Cold)</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Inner (Cold Side)</label>
                                         <div class="flex items-center gap-1">
                                             <input type="number" id="in-t2" min="0" max="35" value="20" 
                                                 oninput="syncTemperature('t2', this.value)"
@@ -251,7 +251,7 @@
                         </div>
                         <div class="mt-6 pt-4 border-t border-slate-800 space-y-3">
                             <div>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Total Resistance Equation:</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Total Resistance Formula:</p>
                                 <p class="text-xs engineering-font text-slate-300">R_total = Σ (L_i / k_i)</p>
                             </div>
                             <div>
@@ -327,21 +327,21 @@
         const notesData = {
             conduction: {
                 title: "Conduction",
-                desc: "Pindahan tenaga daripada zarah-zarah bahan yang lebih bertenaga kepada yang kurang bertenaga hasil daripada interaksi antara zarah.",
+                desc: "The transfer of energy from more energetic particles of a substance to adjacent less energetic ones as a result of interactions between particles.",
                 formula: "Q' = -kA (dT/dx)",
-                sub: ["Kekonduksian Terma (k) menentukan prestasi haba.", "Logam biasanya mempunyai nilai k yang tinggi."]
+                sub: ["Thermal Conductivity (k) determines heat performance.", "Metals usually have very high k values."]
             },
             convection: {
                 title: "Convection",
-                desc: "Pindahan haba antara permukaan pepejal dan cecair atau gas bersebelahan yang sedang bergerak.",
+                desc: "Heat transfer between a solid surface and an adjacent liquid or gas that is in motion.",
                 formula: "Q' = hA (Ts - Tf)",
-                sub: ["Hukum Penyejukan Newton.", "Pekali perolakan (h) bergantung kepada halaju bendalir."]
+                sub: ["Newton's Law of Cooling.", "Convection coefficient (h) depends on fluid velocity."]
             },
             radiation: {
                 title: "Radiation",
-                desc: "Tenaga yang dipancarkan oleh jirim dalam bentuk gelombang elektromagnet akibat perubahan konfigurasi elektronik atom atau molekul.",
+                desc: "Energy emitted by matter in the form of electromagnetic waves due to changes in the electronic configurations of atoms or molecules.",
                 formula: "Q' = εσA(Ts⁴ - Tsur⁴)",
-                sub: ["Tidak memerlukan medium (berfungsi dalam vakum).", "Bergantung kepada emisiviti permukaan (ε)."]
+                sub: ["Does not require a medium (works in a vacuum).", "Dependent on surface emissivity (ε)."]
             }
         };
 
@@ -578,16 +578,16 @@
         }
 
         const engineeringQuestions = [
-            { q: "Apakah unit bagi Kekonduksian Terma (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
-            { q: "Dalam dinding komposit, parameter manakah yang kekal malar merentasi semua lapisan semasa keadaan mantap?", o: ["Penurunan Suhu", "Kadar Haba (Q')", "Rintangan Terma", "Tiada"], c: 1 },
-            { q: "Menambah penebat pada dinding rata SENTIASA meningkatkan rintangan terma.", o: ["Benar", "Palsu", "Hanya dalam vakum", "Hanya untuk logam"], c: 0 },
-            { q: "Rintangan terma adalah analog kepada komponen elektrik yang mana?", o: ["Kapasitor", "Induktor", "Perintang", "Diod"], c: 2 },
-            { q: "Hukum Fourier menyatakan bahawa fluks haba adalah berkadar terus dengan...", o: ["Tekanan", "Ketumpatan", "Gradien Suhu", "Isipadu"], c: 2 },
-            { q: "Bahan manakah yang biasanya mempunyai nilai 'k' tertinggi?", o: ["Kayu", "Udara", "Kuprum", "Konkrit"], c: 2 },
-            { q: "Pemindahan haba melalui konduksi memerlukan medium.", o: ["Benar", "Palsu", "Hanya di angkasa", "Bergantung pada warna"], c: 0 },
-            { q: "Keadaan mantap bermaksud suhu pada mana-mana titik...", o: ["Berkurang", "Bertambah", "Tidak berubah dengan masa", "Sentiasa sifar"], c: 2 },
-            { q: "Tanda 'negatif' dalam Hukum Fourier mewakili...", o: ["Kehilangan haba", "Haba mengalir bertentangan dengan gradien suhu", "Ralat matematik", "Keadaan vakum"], c: 1 },
-            { q: "Dinding komposit dengan 3 lapisan akan mempunyai berapa banyak nod dalam rangkaian termanya?", o: ["2", "3", "4", "5"], c: 2 }
+            { q: "What is the unit for Thermal Conductivity (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
+            { q: "In a composite wall, which parameter remains constant across all layers during steady state?", o: ["Temperature Drop", "Heat Rate (Q')", "Thermal Resistance", "None"], c: 1 },
+            { q: "Adding insulation to a flat wall ALWAYS increases thermal resistance.", o: ["True", "False", "Only in a vacuum", "Only for metals"], c: 0 },
+            { q: "Thermal resistance is analogous to which electrical component?", o: ["Capacitor", "Inductor", "Resistor", "Diode"], c: 2 },
+            { q: "Fourier's Law states that heat flux is directly proportional to...", o: ["Pressure", "Density", "Temperature Gradient", "Volume"], c: 2 },
+            { q: "Which material typically has the highest 'k' value?", o: ["Wood", "Air", "Copper", "Concrete"], c: 2 },
+            { q: "Heat transfer through conduction requires a medium.", o: ["True", "False", "Only in space", "Depends on color"], c: 0 },
+            { q: "Steady state means the temperature at any given point...", o: ["Decreases", "Increases", "Does not change with time", "Is always zero"], c: 2 },
+            { q: "The 'negative' sign in Fourier's Law represents...", o: ["Heat loss", "Heat flows opposite to temperature gradient", "Mathematical error", "Vacuum condition"], c: 1 },
+            { q: "A composite wall with 3 layers will have how many nodes in its thermal network?", o: ["2", "3", "4", "5"], c: 2 }
         ];
 
         let qIdx = 0, qScore = 0, qSelect = null;
