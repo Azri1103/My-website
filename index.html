@@ -109,6 +109,11 @@
             color: white;
             box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
         }
+
+        sub {
+            font-size: 0.7em;
+            vertical-align: sub;
+        }
     </style>
 </head>
 <body class="text-slate-900 selection:bg-orange-100 selection:text-orange-900">
@@ -208,7 +213,7 @@
                             <div class="bg-slate-50 p-4 rounded-xl space-y-4">
                                 <div>
                                     <div class="flex justify-between mb-1">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Outer (Hot Side)</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T<sub>hot</sub> (Hot Side)</label>
                                         <div class="flex items-center gap-1">
                                             <input type="number" id="in-t1" min="20" max="150" value="40" 
                                                 oninput="syncTemperature('t1', this.value)"
@@ -220,7 +225,7 @@
                                 </div>
                                 <div>
                                     <div class="flex justify-between mb-1">
-                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T_Inner (Cold Side)</label>
+                                        <label class="text-[10px] font-bold text-slate-500 uppercase">T<sub>cold</sub> (Cold Side)</label>
                                         <div class="flex items-center gap-1">
                                             <input type="number" id="in-t2" min="0" max="35" value="20" 
                                                 oninput="syncTemperature('t2', this.value)"
@@ -239,12 +244,12 @@
                     <div class="bg-slate-900 rounded-[24px] p-8 text-white">
                         <div class="grid grid-cols-2 gap-6">
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Total ΣR</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Total ΣR<sub>total</sub></span>
                                 <p id="out-r" class="text-2xl font-bold engineering-font text-emerald-400">0.000</p>
                                 <span class="text-[9px] text-slate-500 uppercase">K/W</span>
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Rate Q'</span>
+                                <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Rate Q̇</span>
                                 <p id="out-q" class="text-2xl font-bold engineering-font text-orange-400">0.0</p>
                                 <span class="text-[9px] text-slate-500 uppercase">W/m²</span>
                             </div>
@@ -252,11 +257,11 @@
                         <div class="mt-6 pt-4 border-t border-slate-800 space-y-3">
                             <div>
                                 <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Total Resistance Formula:</p>
-                                <p class="text-xs engineering-font text-slate-300">R_total = Σ (L_i / k_i)</p>
+                                <p class="text-xs engineering-font text-slate-300">R<sub>total</sub> = Σ (L<sub>i</sub> / k<sub>i</sub>)</p>
                             </div>
                             <div>
                                 <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Temperature at Interface n:</p>
-                                <p class="text-xs engineering-font text-slate-300">T_n = T_{n-1} - (Q' × R_n)</p>
+                                <p class="text-xs engineering-font text-slate-300">T<sub>n</sub> = T<sub>n-1</sub> - (Q̇ × R<sub>n</sub>)</p>
                             </div>
                         </div>
                     </div>
@@ -278,7 +283,7 @@
                             <div id="circuit-visualizer" class="max-w-3xl mx-auto flex items-center justify-center gap-0 px-4 overflow-x-auto pb-4"></div>
                             <div class="text-center mt-8">
                                 <div class="inline-block bg-orange-50 px-6 py-2 rounded-full border border-orange-100">
-                                    <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Ohm's Law Analogy: Q' = (T_hot - T_cold) / R_total</p>
+                                    <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Ohm's Law Analogy: Q̇ = (T<sub>hot</sub> - T<sub>cold</sub>) / R<sub>total</sub></p>
                                 </div>
                             </div>
                         </div>
@@ -328,19 +333,19 @@
             conduction: {
                 title: "Conduction",
                 desc: "The transfer of energy from more energetic particles of a substance to adjacent less energetic ones as a result of interactions between particles.",
-                formula: "Q' = -kA (dT/dx)",
+                formula: "Q̇ = -kA (dT/dx)",
                 sub: ["Thermal Conductivity (k) determines heat performance.", "Metals usually have very high k values."]
             },
             convection: {
                 title: "Convection",
                 desc: "Heat transfer between a solid surface and an adjacent liquid or gas that is in motion.",
-                formula: "Q' = hA (Ts - Tf)",
+                formula: "Q̇ = hA (T<sub>s</sub> - T<sub>f</sub>)",
                 sub: ["Newton's Law of Cooling.", "Convection coefficient (h) depends on fluid velocity."]
             },
             radiation: {
                 title: "Radiation",
                 desc: "Energy emitted by matter in the form of electromagnetic waves due to changes in the electronic configurations of atoms or molecules.",
-                formula: "Q' = εσA(Ts⁴ - Tsur⁴)",
+                formula: "Q̇ = εσA(T<sub>s</sub><sup>4</sup> - T<sub>sur</sub><sup>4</sup>)",
                 sub: ["Does not require a medium (works in a vacuum).", "Dependent on surface emissivity (ε)."]
             }
         };
@@ -515,29 +520,29 @@
             const T1 = parseFloat(document.getElementById('t1').value);
             const T2 = parseFloat(document.getElementById('t2').value);
 
-            let Rtotal = 0;
+            let RtotalValue = 0;
             let resistances = [];
             
             layers.forEach(layer => {
                 const k = materials[layer.materialIdx].k;
                 const R = layer.thickness / (k * 1.0); 
-                Rtotal += R;
+                RtotalValue += R;
                 resistances.push(R);
             });
 
-            const Q_prime = (T1 - T2) / Rtotal;
+            const Q_prime = (T1 - T2) / RtotalValue;
             
             let currentT = T1;
             let tempData = [T1];
-            let labels = ['T_Outer'];
+            let labels = ['T<sub>hot</sub>'];
             
             layers.forEach((layer, i) => {
                 currentT = currentT - (Q_prime * resistances[i]);
                 tempData.push(currentT);
-                labels.push(i === layers.length - 1 ? 'T_Inner' : `T_Int ${i+1}`);
+                labels.push(i === layers.length - 1 ? 'T<sub>cold</sub>' : `T<sub>int${i+1}</sub>`);
             });
 
-            document.getElementById('out-r').innerText = Rtotal.toFixed(3);
+            document.getElementById('out-r').innerText = RtotalValue.toFixed(3);
             document.getElementById('out-q').innerText = Q_prime.toFixed(1);
             
             const legend = document.getElementById('material-legend');
@@ -553,7 +558,7 @@
             circuit.innerHTML += `
                 <div class="flex flex-col items-center gap-1">
                     <div class="node bg-red-500 shadow-[0_0_8px_red]"></div>
-                    <span class="text-[8px] font-bold engineering-font">T_Outer</span>
+                    <span class="text-[8px] font-bold engineering-font">T<sub>hot</sub></span>
                 </div>
             `;
             
@@ -561,11 +566,11 @@
                 circuit.innerHTML += `
                     <div class="resistor-line flex items-center justify-center">
                         <div class="resistor-zigzag"></div>
-                        <span class="absolute -top-5 text-[8px] font-bold text-slate-400">R${i+1}</span>
+                        <span class="absolute -top-5 text-[8px] font-bold text-slate-400">R<sub>${i+1}</sub></span>
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <div class="node ${i === layers.length - 1 ? 'bg-blue-500 shadow-[0_0_8px_blue]' : ''}"></div>
-                        <span class="text-[8px] font-bold engineering-font">${i === layers.length - 1 ? 'T_Inner' : `T_i${i+1}`}</span>
+                        <span class="text-[8px] font-bold engineering-font">${i === layers.length - 1 ? 'T<sub>cold</sub>' : `T<sub>int${i+1}</sub>`}</span>
                     </div>
                 `;
             });
@@ -579,7 +584,7 @@
 
         const engineeringQuestions = [
             { q: "What is the unit for Thermal Conductivity (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
-            { q: "In a composite wall, which parameter remains constant across all layers during steady state?", o: ["Temperature Drop", "Heat Rate (Q')", "Thermal Resistance", "None"], c: 1 },
+            { q: "In a composite wall, which parameter remains constant across all layers during steady state?", o: ["Temperature Drop", "Heat Rate (Q̇)", "Thermal Resistance", "None"], c: 1 },
             { q: "Adding insulation to a flat wall ALWAYS increases thermal resistance.", o: ["True", "False", "Only in a vacuum", "Only for metals"], c: 0 },
             { q: "Thermal resistance is analogous to which electrical component?", o: ["Capacitor", "Inductor", "Resistor", "Diode"], c: 2 },
             { q: "Fourier's Law states that heat flux is directly proportional to...", o: ["Pressure", "Density", "Temperature Gradient", "Volume"], c: 2 },
