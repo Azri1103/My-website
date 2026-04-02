@@ -104,7 +104,6 @@
             border-radius: 10px;
         }
 
-        /* Tabs Styling */
         .tab-btn-active {
             background-color: var(--primary);
             color: white;
@@ -163,16 +162,13 @@
                 <h2 class="text-4xl md:text-5xl font-black mt-2">Heat Transfer Mechanisms</h2>
             </div>
 
-            <!-- Note Tabs -->
             <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-8 bg-slate-200/50 p-1.5 rounded-2xl w-fit mx-auto md:mx-0">
                 <button onclick="switchNoteTab('conduction')" id="tab-conduction" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all tab-btn-active">Conduction</button>
                 <button onclick="switchNoteTab('convection')" id="tab-convection" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Convection</button>
                 <button onclick="switchNoteTab('radiation')" id="tab-radiation" class="note-tab px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-700 transition-all">Radiation</button>
             </div>
             
-            <div id="note-display" class="grid lg:grid-cols-3 gap-8">
-                <!-- Content injected via JS -->
-            </div>
+            <div id="note-display" class="grid lg:grid-cols-3 gap-8"></div>
         </section>
 
         <!-- SECTION: VIDEO -->
@@ -211,24 +207,32 @@
                         <div class="space-y-6">
                             <div class="bg-slate-50 p-4 rounded-xl space-y-4">
                                 <div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between mb-1">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase">T_Outer (Hot)</label>
-                                        <span id="v-t1" class="text-red-600 font-bold engineering-font">40°C</span>
+                                        <div class="flex items-center gap-1">
+                                            <input type="number" id="in-t1" min="20" max="150" value="40" 
+                                                oninput="syncTemperature('t1', this.value)"
+                                                class="w-12 text-right text-xs font-bold text-red-600 engineering-font bg-white border border-slate-200 rounded px-1 outline-none">
+                                            <span class="text-[9px] font-bold text-slate-400">°C</span>
+                                        </div>
                                     </div>
-                                    <input type="range" id="t1" min="20" max="150" value="40" class="w-full">
+                                    <input type="range" id="t1" min="20" max="150" value="40" oninput="syncTemperature('t1', this.value)" class="w-full">
                                 </div>
                                 <div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between mb-1">
                                         <label class="text-[10px] font-bold text-slate-500 uppercase">T_Inner (Cold)</label>
-                                        <span id="v-t2" class="text-blue-600 font-bold engineering-font">20°C</span>
+                                        <div class="flex items-center gap-1">
+                                            <input type="number" id="in-t2" min="0" max="35" value="20" 
+                                                oninput="syncTemperature('t2', this.value)"
+                                                class="w-12 text-right text-xs font-bold text-blue-600 engineering-font bg-white border border-slate-200 rounded px-1 outline-none">
+                                            <span class="text-[9px] font-bold text-slate-400">°C</span>
+                                        </div>
                                     </div>
-                                    <input type="range" id="t2" min="0" max="35" value="20" class="w-full">
+                                    <input type="range" id="t2" min="0" max="35" value="20" oninput="syncTemperature('t2', this.value)" class="w-full">
                                 </div>
                             </div>
 
-                            <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                                <!-- Layers injected here -->
-                            </div>
+                            <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar"></div>
                         </div>
                     </div>
 
@@ -245,6 +249,16 @@
                                 <span class="text-[9px] text-slate-500 uppercase">W/m²</span>
                             </div>
                         </div>
+                        <div class="mt-6 pt-4 border-t border-slate-800 space-y-3">
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Total Resistance Equation:</p>
+                                <p class="text-xs engineering-font text-slate-300">R_total = Σ (L_i / k_i)</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Temperature at Interface n:</p>
+                                <p class="text-xs engineering-font text-slate-300">T_n = T_{n-1} - (Q' × R_n)</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -252,9 +266,7 @@
                     <div class="glass-card p-8">
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                             <h3 class="font-bold">Composite Wall Temperature Profile</h3>
-                            <div id="material-legend" class="flex flex-wrap gap-3">
-                                <!-- Legend injected here -->
-                            </div>
+                            <div id="material-legend" class="flex flex-wrap gap-3"></div>
                         </div>
                         
                         <div class="relative h-64 md:h-80 mb-12">
@@ -263,9 +275,7 @@
 
                         <div class="pt-8 border-t border-slate-100">
                             <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-10 text-center underline decoration-orange-500 underline-offset-8">Thermal Resistance Network Analogy</h4>
-                            <div id="circuit-visualizer" class="max-w-3xl mx-auto flex items-center justify-center gap-0 px-4 overflow-x-auto pb-4">
-                                <!-- Nodes and resistors injected here -->
-                            </div>
+                            <div id="circuit-visualizer" class="max-w-3xl mx-auto flex items-center justify-center gap-0 px-4 overflow-x-auto pb-4"></div>
                             <div class="text-center mt-8">
                                 <div class="inline-block bg-orange-50 px-6 py-2 rounded-full border border-orange-100">
                                     <p class="text-xs font-bold text-orange-700 uppercase tracking-tighter">Ohm's Law Analogy: Q' = (T_hot - T_cold) / R_total</p>
@@ -314,30 +324,28 @@
             { materialIdx: 3, thickness: 0.05 }
         ];
 
-        // NOTES DATA
         const notesData = {
             conduction: {
                 title: "Conduction",
-                desc: "Transfer of energy from more energetic particles of a substance to adjacent less energetic ones as a result of interaction between particles.",
+                desc: "Pindahan tenaga daripada zarah-zarah bahan yang lebih bertenaga kepada yang kurang bertenaga hasil daripada interaksi antara zarah.",
                 formula: "Q' = -kA (dT/dx)",
-                sub: ["Thermal Conductivity (k) determines heat performance.", "Metals typically have high k values."]
+                sub: ["Kekonduksian Terma (k) menentukan prestasi haba.", "Logam biasanya mempunyai nilai k yang tinggi."]
             },
             convection: {
                 title: "Convection",
-                desc: "Heat transfer between a solid surface and the adjacent liquid or gas that is in motion.",
+                desc: "Pindahan haba antara permukaan pepejal dan cecair atau gas bersebelahan yang sedang bergerak.",
                 formula: "Q' = hA (Ts - Tf)",
-                sub: ["Newton's Law of Cooling.", "Convection coefficient (h) depends on fluid velocity."]
+                sub: ["Hukum Penyejukan Newton.", "Pekali perolakan (h) bergantung kepada halaju bendalir."]
             },
             radiation: {
                 title: "Radiation",
-                desc: "Energy emitted by matter in the form of electromagnetic waves as a result of changes in the electronic configurations of the atoms or molecules.",
+                desc: "Tenaga yang dipancarkan oleh jirim dalam bentuk gelombang elektromagnet akibat perubahan konfigurasi elektronik atom atau molekul.",
                 formula: "Q' = εσA(Ts⁴ - Tsur⁴)",
-                sub: ["Does not require a medium (works in vacuum).", "Dependent on surface emissivity (ε)."]
+                sub: ["Tidak memerlukan medium (berfungsi dalam vakum).", "Bergantung kepada emisiviti permukaan (ε)."]
             }
         };
 
         function switchNoteTab(type) {
-            // Update UI tabs
             document.querySelectorAll('.note-tab').forEach(t => t.classList.remove('tab-btn-active', 'text-white'));
             document.querySelectorAll('.note-tab').forEach(t => t.classList.add('text-slate-500'));
             document.getElementById('tab-' + type).classList.add('tab-btn-active');
@@ -383,6 +391,24 @@
             document.getElementById('m-nav-' + id).classList.add('nav-item-active-m', 'text-orange-600');
             if (id === 'simulation' && !chart) initChart();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function syncTemperature(id, val) {
+            const range = document.getElementById(id);
+            const input = document.getElementById('in-' + id);
+            
+            let num = parseFloat(val);
+            if (isNaN(num)) num = id === 't1' ? 20 : 0;
+            
+            const min = parseFloat(range.min);
+            const max = parseFloat(range.max);
+            
+            if (num < min) num = min;
+            if (num > max) num = max;
+
+            range.value = num;
+            input.value = num;
+            updateSimulation();
         }
 
         function renderLayers() {
@@ -488,8 +514,6 @@
         function updateSimulation() {
             const T1 = parseFloat(document.getElementById('t1').value);
             const T2 = parseFloat(document.getElementById('t2').value);
-            document.getElementById('v-t1').innerText = T1 + '°C';
-            document.getElementById('v-t2').innerText = T2 + '°C';
 
             let Rtotal = 0;
             let resistances = [];
@@ -526,7 +550,6 @@
 
             const circuit = document.getElementById('circuit-visualizer');
             circuit.innerHTML = '';
-            
             circuit.innerHTML += `
                 <div class="flex flex-col items-center gap-1">
                     <div class="node bg-red-500 shadow-[0_0_8px_red]"></div>
@@ -554,20 +577,17 @@
             }
         }
 
-        document.getElementById('t1').addEventListener('input', updateSimulation);
-        document.getElementById('t2').addEventListener('input', updateSimulation);
-
         const engineeringQuestions = [
-            { q: "What is the unit of Thermal Conductivity (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
-            { q: "In a composite wall, which parameter remains constant across all layers during steady state?", o: ["Temperature Drop", "Heat Rate (Q')", "Thermal Resistance", "None"], c: 1 },
-            { q: "Adding insulation to a flat wall ALWAYS increases thermal resistance.", o: ["True", "False", "Only in vacuum", "Only for metals"], c: 0 },
-            { q: "Thermal resistance is analogous to which electrical component?", o: ["Capacitor", "Inductor", "Resistor", "Diode"], c: 2 },
-            { q: "Fourier's Law states that heat flux is directly proportional to...", o: ["Pressure", "Density", "Temperature Gradient", "Volume"], c: 2 },
-            { q: "Which material typically has the highest 'k' value?", o: ["Wood", "Air", "Copper", "Concrete"], c: 2 },
-            { q: "Heat transfer by conduction requires a medium.", o: ["True", "False", "Only in space", "Depends on color"], c: 0 },
-            { q: "Steady-state condition means temperature at any point...", o: ["Decreases", "Increases", "Does not change with time", "Is always zero"], c: 2 },
-            { q: "The 'negative' sign in Fourier's Law represents...", o: ["Heat loss", "Heat flows opposite to temperature gradient", "Mathematical error", "Vacuum condition"], c: 1 },
-            { q: "A composite wall with 3 layers will have how many nodes in its thermal network?", o: ["2", "3", "4", "5"], c: 2 }
+            { q: "Apakah unit bagi Kekonduksian Terma (k)?", o: ["W/m.K", "J/kg.C", "N/m2", "K/W"], c: 0 },
+            { q: "Dalam dinding komposit, parameter manakah yang kekal malar merentasi semua lapisan semasa keadaan mantap?", o: ["Penurunan Suhu", "Kadar Haba (Q')", "Rintangan Terma", "Tiada"], c: 1 },
+            { q: "Menambah penebat pada dinding rata SENTIASA meningkatkan rintangan terma.", o: ["Benar", "Palsu", "Hanya dalam vakum", "Hanya untuk logam"], c: 0 },
+            { q: "Rintangan terma adalah analog kepada komponen elektrik yang mana?", o: ["Kapasitor", "Induktor", "Perintang", "Diod"], c: 2 },
+            { q: "Hukum Fourier menyatakan bahawa fluks haba adalah berkadar terus dengan...", o: ["Tekanan", "Ketumpatan", "Gradien Suhu", "Isipadu"], c: 2 },
+            { q: "Bahan manakah yang biasanya mempunyai nilai 'k' tertinggi?", o: ["Kayu", "Udara", "Kuprum", "Konkrit"], c: 2 },
+            { q: "Pemindahan haba melalui konduksi memerlukan medium.", o: ["Benar", "Palsu", "Hanya di angkasa", "Bergantung pada warna"], c: 0 },
+            { q: "Keadaan mantap bermaksud suhu pada mana-mana titik...", o: ["Berkurang", "Bertambah", "Tidak berubah dengan masa", "Sentiasa sifar"], c: 2 },
+            { q: "Tanda 'negatif' dalam Hukum Fourier mewakili...", o: ["Kehilangan haba", "Haba mengalir bertentangan dengan gradien suhu", "Ralat matematik", "Keadaan vakum"], c: 1 },
+            { q: "Dinding komposit dengan 3 lapisan akan mempunyai berapa banyak nod dalam rangkaian termanya?", o: ["2", "3", "4", "5"], c: 2 }
         ];
 
         let qIdx = 0, qScore = 0, qSelect = null;
