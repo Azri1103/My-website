@@ -26,7 +26,7 @@
             body { padding-bottom: 0; }
         }
 
-        /* NEW HEADER STYLING */
+        /* PREMIUM HEADER STYLING */
         .premium-header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             position: relative;
@@ -128,7 +128,7 @@
         }
         #three-container:active { cursor: grabbing; }
 
-        /* Thermal Circuit Styling Improved */
+        /* Thermal Circuit Styling */
         .circuit-segment {
             display: flex;
             align-items: center;
@@ -170,7 +170,7 @@
 </head>
 <body class="text-slate-900">
 
-    <!-- TOP HEADER (NEW) -->
+    <!-- TOP HEADER -->
     <header class="premium-header py-6 md:py-8 border-b border-orange-500/20">
         <div class="header-pattern"></div>
         <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -361,7 +361,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6">
                     <div class="glass-card p-6">
-                        <h3 class="text-sm font-bold text-slate-800 mb-6 border-b pb-2 uppercase tracking-widest">Suhu Sempadan</h3>
+                        <h3 class="text-sm font-bold text-slate-800 mb-6 border-b pb-2 uppercase tracking-widest">Boundary Conditions</h3>
                         <div class="space-y-6">
                             <div>
                                 <div class="flex justify-between mb-2">
@@ -387,8 +387,8 @@
                     </div>
                     <div class="glass-card p-6">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest">Lapisan Material</h3>
-                            <button onclick="addLayer()" class="bg-orange-600 text-white text-[10px] px-3 py-1 rounded-full font-bold hover:bg-orange-700 transition-colors">+ TAMBAH</button>
+                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest">Material Layers</h3>
+                            <button onclick="addLayer()" class="bg-orange-600 text-white text-[10px] px-3 py-1 rounded-full font-bold hover:bg-orange-700 transition-colors">+ ADD LAYER</button>
                         </div>
                         <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2"></div>
                     </div>
@@ -405,8 +405,8 @@
                     <div class="glass-card p-0 h-[350px] md:h-[450px] overflow-hidden relative border border-slate-200 bg-slate-900 shadow-xl">
                         <div id="three-container"></div>
                         <div class="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 pointer-events-none">
-                            <span class="text-[10px] text-white/70 font-bold uppercase tracking-wider block" id="viz-title">Visualisasi 3D</span>
-                            <span class="text-[9px] text-orange-400 font-mono italic">Seret untuk Putar (Mobile/PC)</span>
+                            <span class="text-[10px] text-white/70 font-bold uppercase tracking-wider block" id="viz-title">3D Visualization</span>
+                            <span class="text-[9px] text-orange-400 font-mono italic">Drag to Rotate (Mobile/PC)</span>
                         </div>
                     </div>
                     <div class="glass-card p-6 h-80">
@@ -415,17 +415,17 @@
                     <div class="bg-slate-900 rounded-[32px] p-8 text-white grid grid-cols-2 md:grid-cols-3 gap-6 shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-blue-500"></div>
                         <div class="text-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Rintangan Terma (ΣRt)</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Total Resistance (ΣRt)</span>
                             <p id="res-rt" class="text-2xl font-black engineering-font text-emerald-400">0.0000</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">K/W</span>
                         </div>
                         <div class="text-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Kadar Haba (Q)</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Rate (Q)</span>
                             <p id="res-q" class="text-2xl font-black engineering-font text-orange-400">0.0</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">WATT</span>
                         </div>
                         <div class="text-center col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-slate-700 pt-4 md:pt-0">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Fluks Haba (q")</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Flux (q")</span>
                             <p id="res-flux" class="text-2xl font-black engineering-font text-blue-400">0.0</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">W/m²</span>
                         </div>
@@ -787,7 +787,7 @@
                 data: {
                     labels: pos.map(p => p.toFixed(2)),
                     datasets: [{ 
-                        label: 'Profil Suhu (°C)', 
+                        label: 'Temperature Profile (°C)', 
                         data: temps.map(t => t.toFixed(2)), 
                         borderColor: '#f97316', 
                         backgroundColor: 'rgba(249, 115, 22, 0.1)',
@@ -803,11 +803,11 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { 
-                            title: { display: true, text: 'Suhu (°C)', font: { weight: 'bold' } },
+                            title: { display: true, text: 'Temperature (°C)', font: { weight: 'bold' } },
                             grid: { color: 'rgba(0,0,0,0.05)' }
                         },
                         x: { 
-                            title: { display: true, text: currentGeo === 'flat' ? 'Kedudukan (m)' : 'Jejari (m)', font: { weight: 'bold' } },
+                            title: { display: true, text: currentGeo === 'flat' ? 'Position (m)' : 'Radius (m)', font: { weight: 'bold' } },
                             grid: { display: false }
                         }
                     }
@@ -829,7 +829,7 @@
             setTimeout(() => {
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'ai-chat-bubble p-4 bg-white border rounded-2xl rounded-tl-none shadow-sm text-sm text-slate-700 max-w-[85%]';
-                aiDiv.innerText = "Itu soalan yang bagus mengenai " + userText.substring(0, 20) + "... Dalam pengaliran haba, rintangan terma (R) bergantung kepada kekonduksian terma (k) dan ketebalan material (L).";
+                aiDiv.innerText = "That's a great question about " + userText.substring(0, 20) + "... In heat transfer, thermal resistance (R) depends on thermal conductivity (k) and the material thickness (L).";
                 chatMessages.appendChild(aiDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1000);
