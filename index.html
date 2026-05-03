@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeatMaster Pro | Engineering Learning Suite</title>
+    <title>KJM442 | HeatMaster Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -24,6 +24,27 @@
 
         @media (min-width: 768px) {
             body { padding-bottom: 0; }
+        }
+
+        /* NEW HEADER STYLING */
+        .premium-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+        }
+        .logo-box {
+            background: linear-gradient(45deg, #f97316, #fb923c);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
         }
 
         .glass-card {
@@ -103,44 +124,83 @@
             width: 100%;
             height: 100%;
             cursor: grab;
+            touch-action: none;
         }
         #three-container:active { cursor: grabbing; }
 
-        /* Thermal Circuit Styling */
+        /* Thermal Circuit Styling Improved */
+        .circuit-segment {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
         .resistor-line {
             height: 2px;
             background: #94a3b8;
             flex-grow: 1;
-            position: relative;
         }
         .resistor-symbol {
-            width: 40px;
-            height: 20px;
+            width: 50px;
+            height: 25px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 20'%3E%3Cpath d='M0 10 L5 10 L8 5 L12 15 L16 5 L20 15 L24 5 L28 15 L32 10 L40 10' fill='none' stroke='%23f97316' stroke-width='2'/%3E%3C/svg%3E");
             background-size: contain;
             background-repeat: no-repeat;
+            background-position: center;
+            flex-shrink: 0;
         }
         .node-circle {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: #475569;
             border-radius: 50%;
             position: relative;
+            flex-shrink: 0;
+            z-index: 2;
         }
         .node-label {
             position: absolute;
-            top: -20px;
+            top: -24px;
             left: 50%;
             transform: translateX(-50%);
             white-space: nowrap;
             font-size: 10px;
-            font-weight: bold;
+            font-weight: 800;
         }
     </style>
 </head>
 <body class="text-slate-900">
 
-    <nav class="bg-white/90 sticky top-0 z-50 border-b border-slate-200 hidden md:block">
+    <!-- TOP HEADER (NEW) -->
+    <header class="premium-header py-6 md:py-8 border-b border-orange-500/20">
+        <div class="header-pattern"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <!-- Creative Logo -->
+                <div class="logo-box w-16 h-16 rounded-2xl flex items-center justify-center rotate-3 transform hover:rotate-0 transition-transform duration-300">
+                    <span class="text-white text-3xl font-black italic tracking-tighter">KJM</span>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight">KJM442 <span class="text-orange-500">HEAT AND FLUID</span></h1>
+                    <p class="text-slate-400 text-xs md:text-sm font-bold tracking-widest uppercase mt-1">Advanced Thermal Sciences Learning Platform</p>
+                </div>
+            </div>
+            <div class="hidden lg:flex gap-10">
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Academic Year</span>
+                    <span class="text-white font-black">2024 / 2025</span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Status</span>
+                    <span class="flex items-center gap-2 text-emerald-400 font-black">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE SIMULATOR
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION DESKTOP -->
+    <nav class="bg-white/90 sticky top-0 z-50 border-b border-slate-200 hidden md:block backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center gap-3">
@@ -159,6 +219,7 @@
         </div>
     </nav>
 
+    <!-- NAVIGATION MOBILE -->
     <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-50 md:hidden pb-safe">
         <div class="flex justify-around items-center h-16">
             <button onclick="showSection('notes')" id="nav-notes-mobile" class="nav-btn-mobile flex flex-col items-center gap-1 text-orange-600 nav-item-active">
@@ -300,7 +361,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-4 space-y-6">
                     <div class="glass-card p-6">
-                        <h3 class="text-sm font-bold text-slate-800 mb-6 border-b pb-2 uppercase tracking-widest">Input Parameters</h3>
+                        <h3 class="text-sm font-bold text-slate-800 mb-6 border-b pb-2 uppercase tracking-widest">Suhu Sempadan</h3>
                         <div class="space-y-6">
                             <div>
                                 <div class="flex justify-between mb-2">
@@ -326,8 +387,8 @@
                     </div>
                     <div class="glass-card p-6">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest">Material Layers</h3>
-                            <button onclick="addLayer()" class="bg-orange-600 text-white text-[10px] px-3 py-1 rounded-full font-bold hover:bg-orange-700 transition-colors">+ ADD LAYER</button>
+                            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-widest">Lapisan Material</h3>
+                            <button onclick="addLayer()" class="bg-orange-600 text-white text-[10px] px-3 py-1 rounded-full font-bold hover:bg-orange-700 transition-colors">+ TAMBAH</button>
                         </div>
                         <div id="layers-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-2"></div>
                     </div>
@@ -335,8 +396,8 @@
                 <div class="lg:col-span-8 space-y-6">
                     <!-- Thermal Circuit View -->
                     <div class="glass-card p-6 bg-slate-50 border-dashed border-2 border-slate-200">
-                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Thermal Circuit Representation</h3>
-                        <div id="thermal-circuit" class="flex items-center justify-between px-4 py-8 overflow-x-auto min-h-[120px]">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Thermal Circuit Representation (Connected)</h3>
+                        <div id="thermal-circuit" class="flex items-center justify-center px-4 py-8 overflow-x-auto min-h-[140px]">
                             <!-- Circuit items injected by JS -->
                         </div>
                     </div>
@@ -344,8 +405,8 @@
                     <div class="glass-card p-0 h-[350px] md:h-[450px] overflow-hidden relative border border-slate-200 bg-slate-900 shadow-xl">
                         <div id="three-container"></div>
                         <div class="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 pointer-events-none">
-                            <span class="text-[10px] text-white/70 font-bold uppercase tracking-wider block" id="viz-title">3D Visualization</span>
-                            <span class="text-[9px] text-orange-400 font-mono italic">Click & Drag to Rotate</span>
+                            <span class="text-[10px] text-white/70 font-bold uppercase tracking-wider block" id="viz-title">Visualisasi 3D</span>
+                            <span class="text-[9px] text-orange-400 font-mono italic">Seret untuk Putar (Mobile/PC)</span>
                         </div>
                     </div>
                     <div class="glass-card p-6 h-80">
@@ -354,17 +415,17 @@
                     <div class="bg-slate-900 rounded-[32px] p-8 text-white grid grid-cols-2 md:grid-cols-3 gap-6 shadow-2xl relative overflow-hidden">
                         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-blue-500"></div>
                         <div class="text-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Thermal Resistance (ΣRt)</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Rintangan Terma (ΣRt)</span>
                             <p id="res-rt" class="text-2xl font-black engineering-font text-emerald-400">0.0000</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">K/W</span>
                         </div>
                         <div class="text-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Rate (Q)</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Kadar Haba (Q)</span>
                             <p id="res-q" class="text-2xl font-black engineering-font text-orange-400">0.0</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">WATT</span>
                         </div>
                         <div class="text-center col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-slate-700 pt-4 md:pt-0">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Heat Flux (q")</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block mb-1">Fluks Haba (q")</span>
                             <p id="res-flux" class="text-2xl font-black engineering-font text-blue-400">0.0</p>
                             <span class="text-[10px] text-slate-500 font-bold uppercase">W/m²</span>
                         </div>
@@ -418,21 +479,25 @@
     <script>
         let currentGeo = 'flat';
         let labChart = null;
-        const layerColors = [0xef4444, 0xf97316, 0xeab308, 0x22c55e, 0x3b82f6];
 
-        let layers = [
-            { id: 1, name: 'Brick', k: 0.72, L: 0.2 },
-            { id: 2, name: 'Insulation', k: 0.04, L: 0.05 }
+        const materialData = [
+            { name: 'Brick', k: 0.72, color: 0xef4444 },
+            { name: 'Concrete', k: 1.5, color: 0x94a3b8 },
+            { name: 'Wood', k: 0.13, color: 0x854d0e },
+            { name: 'Glass Fiber', k: 0.04, color: 0xeab308 },
+            { name: 'Steel', k: 45, color: 0x334155 },
+            { name: 'Aluminum', k: 205, color: 0xe2e8f0 },
+            { name: 'Copper', k: 401, color: 0xc2410c }
         ];
 
-        const materials = [
-            { name: 'Brick', k: 0.72 }, { name: 'Concrete', k: 1.5 }, { name: 'Wood', k: 0.13 },
-            { name: 'Fiberglass', k: 0.04 }, { name: 'Aluminum', k: 205 }, { name: 'Steel', k: 45 }
+        let layers = [
+            { id: 1, name: 'Brick', k: 0.72, L: 0.2, color: 0xef4444 },
+            { id: 2, name: 'Glass Fiber', k: 0.04, L: 0.1, color: 0xeab308 }
         ];
 
         let scene, camera, renderer, layersGroup;
         let isDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
+        let previousPosition = { x: 0, y: 0 };
 
         function init3D() {
             const container = document.getElementById('three-container');
@@ -456,16 +521,23 @@
             layersGroup = new THREE.Group();
             scene.add(layersGroup);
 
-            container.addEventListener('mousedown', () => isDragging = true);
-            window.addEventListener('mouseup', () => isDragging = false);
-            container.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    const deltaMove = { x: e.offsetX - previousMousePosition.x, y: e.offsetY - previousMousePosition.y };
-                    layersGroup.rotation.y += deltaMove.x * 0.01;
-                    layersGroup.rotation.x += deltaMove.y * 0.01;
-                }
-                previousMousePosition = { x: e.offsetX, y: e.offsetY };
-            });
+            const onStart = (x, y) => { isDragging = true; previousPosition = { x, y }; };
+            const onMove = (x, y) => {
+                if (!isDragging) return;
+                const deltaMove = { x: x - previousPosition.x, y: y - previousPosition.y };
+                layersGroup.rotation.y += deltaMove.x * 0.01;
+                layersGroup.rotation.x += deltaMove.y * 0.01;
+                previousPosition = { x, y };
+            };
+            const onEnd = () => { isDragging = false; };
+
+            container.addEventListener('mousedown', (e) => onStart(e.clientX, e.clientY));
+            window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', onEnd);
+            container.addEventListener('touchstart', (e) => { const t = e.touches[0]; onStart(t.clientX, t.clientY); }, { passive: true });
+            container.addEventListener('touchmove', (e) => { const t = e.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
+            container.addEventListener('touchend', onEnd);
+
             animate();
         }
 
@@ -488,12 +560,11 @@
             let currentRadius = 0.5;
 
             layers.forEach((layer, i) => {
-                const meshColor = layerColors[i % layerColors.length];
                 const mat = new THREE.MeshPhongMaterial({ 
-                    color: meshColor, 
+                    color: layer.color, 
                     transparent: true, 
-                    opacity: currentGeo === 'cyl' ? 0.95 : 0.9, 
-                    shininess: 60,
+                    opacity: 0.9, 
+                    shininess: 80,
                     side: THREE.DoubleSide
                 });
 
@@ -505,7 +576,7 @@
                     layersGroup.add(mesh);
                     
                     const edges = new THREE.EdgesGeometry(geo);
-                    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 }));
+                    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2, transparent: true, opacity: 0.4 }));
                     line.position.x = mesh.position.x;
                     layersGroup.add(line);
                     currentPos += layer.L;
@@ -516,27 +587,12 @@
                     mesh.rotation.z = Math.PI / 2;
                     layersGroup.add(mesh);
 
-                    const edges = new THREE.EdgesGeometry(geo);
-                    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ 
-                        color: 0xffffff, 
-                        linewidth: 3, 
-                        transparent: true,
-                        opacity: 0.8
-                    }));
-                    line.rotation.z = Math.PI / 2;
-                    layersGroup.add(line);
-
-                    const ringGeo1 = new THREE.TorusGeometry(outerR, 0.015, 16, 64);
-                    const ring1 = new THREE.Mesh(ringGeo1, new THREE.MeshBasicMaterial({ color: 0xffffff }));
-                    ring1.rotation.y = Math.PI / 2;
-                    ring1.position.x = 1.5; 
-                    layersGroup.add(ring1);
-
-                    const ring2 = new THREE.Mesh(ringGeo1, new THREE.MeshBasicMaterial({ color: 0xffffff }));
-                    ring2.rotation.y = Math.PI / 2;
-                    ring2.position.x = -1.5; 
-                    layersGroup.add(ring2);
-
+                    const ringGeo = new THREE.TorusGeometry(outerR, 0.015, 16, 64);
+                    const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 }));
+                    ring.rotation.y = Math.PI / 2;
+                    ring.position.x = 1.5; 
+                    layersGroup.add(ring);
+                    
                     currentRadius = outerR;
                 }
             });
@@ -555,8 +611,6 @@
         function showSection(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
             document.getElementById('section-' + id).classList.remove('hidden');
-            
-            // Sync nav styling
             document.querySelectorAll('.nav-btn-desktop, .nav-btn-mobile').forEach(btn => {
                 btn.classList.remove('nav-item-active', 'text-orange-600');
                 btn.classList.add('text-slate-400');
@@ -604,7 +658,8 @@
 
         function addLayer() {
             if(layers.length >= 5) return;
-            layers.push({ id: Date.now(), name: 'New Layer', k: 1.0, L: 0.2 });
+            const mat = materialData[layers.length % materialData.length];
+            layers.push({ id: Date.now(), name: mat.name, k: mat.k, L: 0.1, color: mat.color });
             renderLayers();
             runSim();
         }
@@ -616,7 +671,19 @@
             runSim();
         }
 
-        function updateLayer(id, field, value) {
+        function updateLayerMaterial(id, materialName) {
+            const layer = layers.find(l => l.id === id);
+            const mat = materialData.find(m => m.name === materialName);
+            if(layer && mat) {
+                layer.name = mat.name;
+                layer.k = mat.k;
+                layer.color = mat.color;
+                renderLayers(); 
+                runSim();
+            }
+        }
+
+        function updateLayerProp(id, field, value) {
             const layer = layers.find(l => l.id === id);
             if(layer) {
                 layer[field] = parseFloat(value);
@@ -627,22 +694,24 @@
         function renderLayers() {
             const container = document.getElementById('layers-container');
             container.innerHTML = layers.map((l, idx) => `
-                <div class="bg-white border rounded-2xl p-4 relative shadow-sm">
-                    <button onclick="removeLayer(${l.id})" class="absolute top-2 right-2 text-slate-300 hover:text-red-500">
+                <div class="bg-white border rounded-2xl p-4 relative shadow-sm hover:shadow-md transition-shadow">
+                    <button onclick="removeLayer(${l.id})" class="absolute top-2 right-2 text-slate-300 hover:text-red-500 transition-colors">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </button>
                     <div class="flex items-center gap-2 mb-3">
-                        <div class="w-5 h-5 rounded-full text-center text-[10px] text-white font-bold" style="background-color: #${layerColors[idx % layerColors.length].toString(16)}">${idx+1}</div>
-                        <span class="font-bold text-xs">${l.name}</span>
+                        <div class="w-5 h-5 rounded-full text-center text-[10px] text-white font-bold leading-5" style="background-color: #${l.color.toString(16).padStart(6, '0')}">${idx+1}</div>
+                        <select onchange="updateLayerMaterial(${l.id}, this.value)" class="font-bold text-xs bg-transparent border-none focus:ring-0 cursor-pointer">
+                            ${materialData.map(m => `<option value="${m.name}" ${m.name === l.name ? 'selected' : ''}>${m.name}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[8px] font-bold text-slate-400 block uppercase">k (W/m.K)</label>
-                            <input type="number" step="0.1" value="${l.k}" onchange="updateLayer(${l.id}, 'k', this.value)" class="w-full bg-slate-50 border rounded px-2 py-1 text-[10px]">
+                            <input type="number" step="0.01" value="${l.k}" onchange="updateLayerProp(${l.id}, 'k', this.value)" class="w-full bg-slate-50 border rounded px-2 py-1 text-[10px] font-mono">
                         </div>
                         <div>
                             <label class="text-[8px] font-bold text-slate-400 block uppercase">${currentGeo === 'flat' ? 'Thick (m)' : 'Δr (m)'}</label>
-                            <input type="number" step="0.05" value="${l.L}" onchange="updateLayer(${l.id}, 'L', this.value)" class="w-full bg-slate-50 border rounded px-2 py-1 text-[10px]">
+                            <input type="number" step="0.01" min="0.01" value="${l.L}" onchange="updateLayerProp(${l.id}, 'L', this.value)" class="w-full bg-slate-50 border rounded px-2 py-1 text-[10px] font-mono">
                         </div>
                     </div>
                 </div>
@@ -652,27 +721,23 @@
         function renderThermalCircuit(temps) {
             const container = document.getElementById('thermal-circuit');
             let html = `
-                <div class="flex items-center">
-                    <div class="node-circle bg-orange-600 shadow-[0_0_10px_rgba(234,88,12,0.5)]">
-                        <span class="node-label text-orange-600">T₁: ${temps[0].toFixed(1)}°C</span>
-                    </div>
-                    <div class="resistor-line"></div>
+                <div class="node-circle bg-orange-600 shadow-[0_0_12px_rgba(234,88,12,0.6)]">
+                    <span class="node-label text-orange-600">T₁: ${temps[0].toFixed(1)}°C</span>
                 </div>
             `;
 
             layers.forEach((l, idx) => {
-                const rtValue = currentGeo === 'flat' ? (l.L / (l.k * 1.0)) : (Math.log((0.5 + l.L) / 0.5) / (2 * Math.PI * l.k * 1.0)); // Note: radius logic simplified for visual
                 html += `
-                    <div class="flex flex-col items-center flex-grow">
-                        <div class="resistor-symbol"></div>
-                        <span class="text-[8px] font-black text-slate-400 mt-1">R<sub>${idx+1}</sub></span>
-                    </div>
-                    <div class="flex items-center">
+                    <div class="circuit-segment">
                         <div class="resistor-line"></div>
-                        <div class="node-circle ${idx === layers.length - 1 ? 'bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.5)]' : ''}">
-                             <span class="node-label ${idx === layers.length - 1 ? 'text-blue-600' : 'text-slate-500'}">T<sub>${idx+2}</sub>: ${temps[idx+1].toFixed(1)}°C</span>
+                        <div class="flex flex-col items-center">
+                            <div class="resistor-symbol"></div>
+                            <span class="text-[8px] font-black text-slate-400">R<sub>${idx+1}</sub></span>
                         </div>
-                        ${idx < layers.length - 1 ? '<div class="resistor-line"></div>' : ''}
+                        <div class="resistor-line"></div>
+                    </div>
+                    <div class="node-circle ${idx === layers.length - 1 ? 'bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.6)]' : 'bg-slate-400'}">
+                         <span class="node-label ${idx === layers.length - 1 ? 'text-blue-600' : 'text-slate-500'}">T<sub>${idx+2}</sub>: ${temps[idx+1].toFixed(1)}°C</span>
                     </div>
                 `;
             });
@@ -721,14 +786,30 @@
                 type: 'line',
                 data: {
                     labels: pos.map(p => p.toFixed(2)),
-                    datasets: [{ label: 'Temperature Profile (°C)', data: temps.map(t => t.toFixed(2)), borderColor: '#f97316', fill: false, tension: 0.1 }]
+                    datasets: [{ 
+                        label: 'Profil Suhu (°C)', 
+                        data: temps.map(t => t.toFixed(2)), 
+                        borderColor: '#f97316', 
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        fill: true, 
+                        tension: 0.3,
+                        pointBackgroundColor: '#f97316',
+                        pointRadius: 4
+                    }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
                     scales: {
-                        y: { title: { display: true, text: 'Temperature (°C)' } },
-                        x: { title: { display: true, text: currentGeo === 'flat' ? 'Position (m)' : 'Radius (m)' } }
+                        y: { 
+                            title: { display: true, text: 'Suhu (°C)', font: { weight: 'bold' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: { 
+                            title: { display: true, text: currentGeo === 'flat' ? 'Kedudukan (m)' : 'Jejari (m)', font: { weight: 'bold' } },
+                            grid: { display: false }
+                        }
                     }
                 }
             });
@@ -745,17 +826,19 @@
             chatMessages.appendChild(userDiv);
             input.value = '';
             
-            // Fake AI Response for demo
             setTimeout(() => {
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'ai-chat-bubble p-4 bg-white border rounded-2xl rounded-tl-none shadow-sm text-sm text-slate-700 max-w-[85%]';
-                aiDiv.innerText = "That's a great question about " + userText.substring(0, 20) + "... Conduction is governed by Fourier's law where Q is proportional to thermal conductivity and the temperature gradient.";
+                aiDiv.innerText = "Itu soalan yang bagus mengenai " + userText.substring(0, 20) + "... Dalam pengaliran haba, rintangan terma (R) bergantung kepada kekonduksian terma (k) dan ketebalan material (L).";
                 chatMessages.appendChild(aiDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1000);
         }
 
-        window.onload = () => { renderLayers(); };
+        window.onload = () => { 
+            renderLayers(); 
+            showSection('notes');
+        };
     </script>
 </body>
 </html>
