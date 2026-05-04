@@ -622,7 +622,9 @@
     <script>
         let currentGeo = 'flat';
         let labChart = null;
-        const apiKey = ""; // Provided at runtime
+        
+        // API KEY
+        const apiKey = "AIzaSyCePt2mwabaW_yzITSIVCTtaCxOeWKUfJU";
 
         const materialData = [
             { name: 'Brick', k: 0.72, color: 0xef4444 },
@@ -960,7 +962,6 @@
                 const previewImg = document.getElementById('preview-img');
                 previewImg.src = e.target.result;
                 preview.style.display = 'block';
-                // Scroll to bottom to show preview
                 const chatMessages = document.getElementById('chat-messages');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             };
@@ -973,33 +974,15 @@
             document.getElementById('file-preview').style.display = 'none';
         }
 
-        // Add paste listener for images
-        document.getElementById('ai-input').addEventListener('paste', (e) => {
-            const items = e.clipboardData.items;
-            for (let i = 0; i < items.length; i++) {
-                if (items[i].type.indexOf('image') !== -1) {
-                    const blob = items[i].getAsFile();
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        selectedFileBase64 = event.target.result.split(',')[1];
-                        document.getElementById('preview-img').src = event.target.result;
-                        document.getElementById('file-preview').style.display = 'block';
-                    };
-                    reader.readAsDataURL(blob);
-                }
-            }
-        });
-
         async function askAI() {
             const input = document.getElementById('ai-input');
             const userText = input.value.trim();
             
             if(!userText && !selectedFileBase64) return;
             
-            input.blur(); // Hide keyboard on mobile
+            input.blur(); 
             const chatMessages = document.getElementById('chat-messages');
             
-            // Render user message
             const userDiv = document.createElement('div');
             userDiv.className = 'ai-chat-bubble p-4 bg-orange-600 text-white rounded-2xl rounded-tr-none shadow-sm text-sm self-end ml-auto max-w-[90%] md:max-w-[85%]';
             
@@ -1020,7 +1003,6 @@
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Show loading
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'ai-chat-bubble p-2 bg-white border rounded-2xl rounded-tl-none shadow-sm max-w-[90%] md:max-w-[85%]';
             loadingDiv.innerHTML = `<div class="ai-loading"><div></div><div></div><div></div></div>`;
@@ -1045,7 +1027,7 @@
             };
 
             try {
-                const systemPrompt = "You are an Engineering Thermal AI Tutor for KJM442 students. Answer in a friendly tone and help step-by-step. Focus on heat physics accuracy. Explain in English. If the user provides an image, analyze it carefully to solve the problem. Ensure answers are easy to read on mobile devices.";
+                const systemPrompt = "You are an Engineering Thermal AI Tutor for KJM442 students. Answer in a friendly tone and help step-by-step. Focus on heat physics accuracy. Explain in English. If the user provides an image, analyze it carefully to solve the problem.";
                 
                 const payload = {
                     contents: [{
@@ -1067,8 +1049,11 @@
                     });
                 }
 
+                // FIXED URL ENDPOINT (Removed extra components from version name)
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+
                 const data = await fetchWithRetry(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+                    apiUrl,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -1077,13 +1062,9 @@
                 );
 
                 let responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I'm having trouble answering that right now.";
-                
-                // Remove LaTeX $ delimiters if Gemini uses them for cleaner text-only display in this UI
-                responseText = responseText.replace(/\$/g, ''); 
-                
-                loadingDiv.innerHTML = responseText;
+                loadingDiv.innerHTML = responseText.replace(/\$/g, ''); 
             } catch (error) {
-                loadingDiv.innerHTML = "Sorry, a connection error occurred. Please try again in a moment.";
+                loadingDiv.innerHTML = "Sorry, a connection error occurred. Please try again.";
                 console.error(error);
             } finally {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
