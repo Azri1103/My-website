@@ -602,7 +602,9 @@
                         </div>
                         
                         <div class="flex gap-2 items-center bg-slate-100 p-1 md:p-2 rounded-2xl">
+                            <!-- Hidden File Input -->
                             <input type="file" id="ai-file-input" class="hidden" accept="image/*" onchange="handleFileSelect(this)">
+                            <!-- Upload Trigger -->
                             <button type="button" onclick="document.getElementById('ai-file-input').click()" class="bg-slate-200 text-slate-600 w-10 h-10 min-w-[40px] rounded-xl hover:bg-slate-300 transition-colors flex items-center justify-center touch-manipulation" title="Upload Image">
                                 <i class="fa-solid fa-camera"></i>
                             </button>
@@ -620,7 +622,7 @@
     <script>
         let currentGeo = 'flat';
         let labChart = null;
-        const apiKey = ""; 
+        const apiKey = ""; // Provided at runtime
 
         const materialData = [
             { name: 'Brick', k: 0.72, color: 0xef4444 },
@@ -944,12 +946,13 @@
             container.innerHTML = html;
         }
 
-        // --- AI TUTOR ---
+        // --- AI TUTOR Logic ---
         let selectedFileBase64 = null;
 
         function handleFileSelect(input) {
             const file = input.files[0];
             if (!file) return;
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 selectedFileBase64 = e.target.result.split(',')[1];
@@ -957,6 +960,7 @@
                 const previewImg = document.getElementById('preview-img');
                 previewImg.src = e.target.result;
                 preview.style.display = 'block';
+                // Scroll to bottom to show preview
                 const chatMessages = document.getElementById('chat-messages');
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             };
@@ -969,31 +973,54 @@
             document.getElementById('file-preview').style.display = 'none';
         }
 
+        // Add paste listener for images
+        document.getElementById('ai-input').addEventListener('paste', (e) => {
+            const items = e.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        selectedFileBase64 = event.target.result.split(',')[1];
+                        document.getElementById('preview-img').src = event.target.result;
+                        document.getElementById('file-preview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        });
+
         async function askAI() {
             const input = document.getElementById('ai-input');
             const userText = input.value.trim();
+            
             if(!userText && !selectedFileBase64) return;
             
-            input.blur();
+            input.blur(); // Hide keyboard on mobile
             const chatMessages = document.getElementById('chat-messages');
             
+            // Render user message
             const userDiv = document.createElement('div');
             userDiv.className = 'ai-chat-bubble p-4 bg-orange-600 text-white rounded-2xl rounded-tr-none shadow-sm text-sm self-end ml-auto max-w-[90%] md:max-w-[85%]';
+            
             if (selectedFileBase64) {
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${selectedFileBase64}`;
                 img.className = "max-w-full rounded-lg mb-2 border border-white/20";
                 userDiv.appendChild(img);
             }
+            
             if (userText) {
                 const txt = document.createElement('div');
                 txt.innerText = userText;
                 userDiv.appendChild(txt);
             }
+            
             chatMessages.appendChild(userDiv);
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
+            // Show loading
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'ai-chat-bubble p-2 bg-white border rounded-2xl rounded-tl-none shadow-sm max-w-[90%] md:max-w-[85%]';
             loadingDiv.innerHTML = `<div class="ai-loading"><div></div><div></div><div></div></div>`;
@@ -1018,40 +1045,67 @@
             };
 
             try {
-                const systemPrompt = "You are an Engineering Thermal AI Tutor for KJM442 students. Answer in a friendly tone and help step-by-step. Focus on heat physics accuracy. Explain in English. Ensure answers are easy to read on mobile devices.";
+                const systemPrompt = "You are an Engineering Thermal AI Tutor for KJM442 students. Answer in a friendly tone and help step-by-step. Focus on heat physics accuracy. Explain in English. If the user provides an image, analyze it carefully to solve the problem. Ensure answers are easy to read on mobile devices.";
+                
                 const payload = {
-                    contents: [{ parts: [{ text: userText || "Please solve this heat transfer problem." }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                    contents: [{
+                        parts: [
+                            { text: userText || "Please solve this heat transfer problem shown in the image." }
+                        ]
+                    }],
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    }
                 };
-                if (currentFile) payload.contents[0].parts.push({ inlineData: { mimeType: "image/png", data: currentFile } });
+
+                if (currentFile) {
+                    payload.contents[0].parts.push({
+                        inlineData: {
+                            mimeType: "image/png",
+                            data: currentFile
+                        }
+                    });
+                }
 
                 const data = await fetchWithRetry(
                     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-                    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
+                    {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    }
                 );
 
                 let responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I'm having trouble answering that right now.";
+                
+                // Remove LaTeX $ delimiters if Gemini uses them for cleaner text-only display in this UI
                 responseText = responseText.replace(/\$/g, ''); 
+                
                 loadingDiv.innerHTML = responseText;
             } catch (error) {
                 loadingDiv.innerHTML = "Sorry, a connection error occurred. Please try again in a moment.";
+                console.error(error);
             } finally {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         }
 
-        // --- QUIZ ---
+        // --- QUIZ Logic ---
         function startQuiz() {
-            quizCurrentIndex = 0; quizScore = 0;
+            quizCurrentIndex = 0;
+            quizScore = 0;
             document.getElementById('quiz-start-screen').classList.add('hidden');
             document.getElementById('quiz-result-screen').classList.add('hidden');
             document.getElementById('quiz-question-screen').classList.remove('hidden');
             showQuestion();
         }
+
         function showQuestion() {
-            const q = quizQuestions[quizCurrentIndex]; quizSelectedAnswer = null;
+            const q = quizQuestions[quizCurrentIndex];
+            quizSelectedAnswer = null;
             document.getElementById('quiz-progress-text').innerText = `Question ${quizCurrentIndex + 1} of ${quizQuestions.length}`;
             document.getElementById('quiz-question-text').innerText = q.q;
+            
             const optionsContainer = document.getElementById('quiz-options-container');
             optionsContainer.innerHTML = q.options.map((opt, i) => `
                 <button onclick="selectQuizOption(${i})" class="quiz-option w-full p-4 rounded-xl text-left font-bold text-slate-700 bg-white flex items-center gap-4">
@@ -1059,29 +1113,47 @@
                     <span class="text-sm md:text-base">${opt}</span>
                 </button>
             `).join('');
+
             const nextBtn = document.getElementById('quiz-next-btn');
             nextBtn.disabled = true;
             nextBtn.className = "bg-slate-200 text-slate-400 font-bold px-8 py-3 rounded-xl transition-all cursor-not-allowed";
         }
+
         function selectQuizOption(index) {
             quizSelectedAnswer = index;
-            document.querySelectorAll('.quiz-option').forEach((opt, i) => { if(i === index) opt.classList.add('selected'); else opt.classList.remove('selected'); });
+            document.querySelectorAll('.quiz-option').forEach((opt, i) => {
+                if(i === index) opt.classList.add('selected');
+                else opt.classList.remove('selected');
+            });
             const nextBtn = document.getElementById('quiz-next-btn');
             nextBtn.disabled = false;
-            nextBtn.className = "bg-orange-600 text-white font-bold px-8 py-3 rounded-xl shadow-lg";
+            nextBtn.className = "bg-orange-600 text-white font-bold px-8 py-3 rounded-xl shadow-lg transform hover:scale-105";
         }
+
         function handleNextQuestion() {
             if(quizSelectedAnswer === quizQuestions[quizCurrentIndex].answer) quizScore++;
-            if(quizCurrentIndex < quizQuestions.length - 1) { quizCurrentIndex++; showQuestion(); } else { showQuizResults(); }
+            if(quizCurrentIndex < quizQuestions.length - 1) {
+                quizCurrentIndex++;
+                showQuestion();
+            } else {
+                showQuizResults();
+            }
         }
+
         function showQuizResults() {
             document.getElementById('quiz-question-screen').classList.add('hidden');
             document.getElementById('quiz-result-screen').classList.remove('hidden');
             document.getElementById('quiz-final-score').innerText = `${quizScore} / ${quizQuestions.length}`;
         }
-        function resetQuiz() { startQuiz(); }
 
-        window.onload = () => { renderLayers(); showSection('notes'); };
+        function resetQuiz() {
+            startQuiz();
+        }
+
+        window.onload = () => {
+            renderLayers();
+            showSection('notes');
+        };
     </script>
 </body>
 </html>
