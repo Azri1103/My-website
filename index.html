@@ -112,6 +112,7 @@
         }
         #three-container:active, #ice-canvas-container:active { cursor: grabbing; }
 
+        /* Thermal Circuit Styling (Litar Terma Visual) */
         .circuit-segment {
             display: flex;
             align-items: center;
@@ -566,6 +567,17 @@
                                 </div>
                                 <input type="range" id="sim-tcold" min="0" max="50" value="25" oninput="syncTemp('tcold', this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
                             </div>
+                            <!-- FITUR AREA / PANJANG DINAMIK -->
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label id="label-area-type" class="text-[10px] font-bold text-slate-400 uppercase">Surface Area (A)</label>
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" id="input-area" value="1.0" min="0.1" max="100" step="0.1" class="w-16 bg-slate-100 border-none rounded px-2 py-0.5 text-xs font-black text-orange-600 focus:ring-1 focus:ring-orange-500" oninput="syncArea(this.value)">
+                                        <span id="unit-area" class="text-xs font-bold text-slate-400">m²</span>
+                                    </div>
+                                </div>
+                                <input type="range" id="sim-area" min="0.1" max="20" step="0.1" value="1.0" oninput="syncArea(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
                         </div>
                     </div>
                     <div class="glass-card p-6">
@@ -693,7 +705,7 @@
                                 </div>
                             </div>
 
-                            <!-- P-V DIAGRAM (Enlarged with Dynamic Auto-Scaling) -->
+                            <!-- P-V DIAGRAM -->
                             <div class="glass-card p-4 h-[400px] bg-white flex flex-col">
                                 <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Dynamic P-v Diagram</h4>
                                 <div class="flex-grow">
@@ -986,7 +998,7 @@
             { q: "The mechanism of heat transfer involving actual bulk motion of matter is:", options: ["Conduction", "Convection", "Radiation", "Absorption"], answer: 1 }
         ];
 
-        // --- CHAPTER 2 EXERCISE (ICE QUIZ DATA - UPDATED TO ENGLISH) ---
+        // --- CHAPTER 2 EXERCISE (ICE QUIZ DATA - IN ENGLISH) ---
         const quizQuestionsCh2 = [
             { q: "The high temperature at the end of the compression process in a Diesel cycle is achieved by heating:", options: ["Air only", "Fuel-air mixture", "Fuel injector", "Spark plug"], answer: 0 },
             { q: "Which of the following describes the ideal Otto cycle?", options: ["Constant volume cycle", "Constant pressure cycle", "Dual-pressure cycle", "Constant temperature cycle"], answer: 0 },
@@ -1128,7 +1140,6 @@
             updateIceParams();
         }
 
-        // --- CALCULATION LOGIC & GRAPHIC SCALING ---
         function updateIceParams() {
             iceR = parseFloat(document.getElementById('ice-param-r').value);
             iceRc = parseFloat(document.getElementById('ice-param-rc').value);
@@ -1186,7 +1197,6 @@
             
             function draw() {
                 if(iceIsRunning) {
-                    // Kadar kelajuan putaran diselaraskan daripada faktor gandaan asal 1.0 kepada 0.2
                     crankAngle += (iceRpm / 60) * 0.2; 
                     if(crankAngle >= 720) crankAngle = 0;
                 }
@@ -1278,6 +1288,12 @@
         }
 
         function initIcePvChart() {
+            // Guard clause to wait until Chart.js is loaded dynamically
+            if (typeof Chart === 'undefined') {
+                setTimeout(initIcePvChart, 100);
+                return;
+            }
+
             const ctx = document.getElementById('icePvChart').getContext('2d');
             iceChart = new Chart(ctx, {
                 type: 'scatter',
@@ -1322,9 +1338,9 @@
         }
 
         function updateIceChart() {
-            if(!iceChart) return;
+            // Check if Chart library and instance exist
+            if (typeof Chart === 'undefined' || !iceChart) return;
             
-            // Generate full cycle data based on params
             const fullCyclePoints = [];
             const r = iceR;
             const rc = iceRc;
@@ -1360,19 +1376,16 @@
             // 4->1 (Const V Rejection)
             fullCyclePoints.push({x: vMax, y: p1});
 
-            // --- AUTO-SCALING LOGIC (MENCARI SKALA MAKSIMUM SECARA DINAMIK) ---
             let maxP_val = 100;
             fullCyclePoints.forEach(pt => {
                 if (pt.y > maxP_val) maxP_val = pt.y;
             });
 
-            // Laraskan had maksimum paksi-X dan paksi-Y supaya graf tidak terpotong
             iceChart.options.scales.x.max = Math.ceil(vMax + 1.0);
-            iceChart.options.scales.y.max = Math.ceil(maxP_val * 1.15); // Tambah 15% padding di bahagian atas graf
+            iceChart.options.scales.y.max = Math.ceil(maxP_val * 1.15);
 
             iceChart.data.datasets[0].data = fullCyclePoints;
             
-            // Current Dot Position Logic
             let currentX = vMax;
             let currentY = p1;
             const normalizedAngle = (crankAngle % 360);
@@ -1409,7 +1422,7 @@
             document.getElementById('tab-btn-' + tabId).classList.add('note-tab-active');
         }
 
-        // --- ICE NOTES TABS (Otto, Diesel, Intro) ---
+        // --- ICE NOTES TABS ---
         function showIceTab(tabId) {
             document.querySelectorAll('.ice-tab-content').forEach(content => content.classList.add('hidden'));
             document.getElementById('note-ice-' + tabId).classList.remove('hidden');
@@ -1434,7 +1447,6 @@
 
             if(id === 'lab') {
                 setTimeout(() => {
-                    // Check if current chapter is 2 to init ICE lab
                     const isCh2 = !document.querySelector('.ch2-content').classList.contains('hidden');
                     if(isCh2) {
                         initIcePiston();
@@ -1448,16 +1460,32 @@
             }
         }
 
+        // --- SINKRONISASI AREA / PANJANG ---
+        function syncArea(val) {
+            const numVal = parseFloat(val);
+            document.getElementById('sim-area').value = numVal;
+            document.getElementById('input-area').value = numVal;
+            runSim(); 
+        }
+
         function switchGeometry(geo) {
             currentGeo = geo;
             const bF = document.getElementById('btn-geo-flat');
             const bC = document.getElementById('btn-geo-cyl');
+            
+            const labelArea = document.getElementById('label-area-type');
+            const unitArea = document.getElementById('unit-area');
+
             if(geo === 'flat') {
                 bF.classList.add('bg-white', 'shadow-sm'); bC.classList.remove('bg-white', 'shadow-sm');
                 bF.classList.remove('text-slate-500'); bC.classList.add('text-slate-500');
+                if(labelArea) labelArea.innerText = "Surface Area (A)";
+                if(unitArea) unitArea.innerText = "m²";
             } else {
                 bC.classList.add('bg-white', 'shadow-sm'); bF.classList.remove('bg-white', 'shadow-sm');
                 bC.classList.remove('text-slate-500'); bF.classList.add('text-slate-500');
+                if(labelArea) labelArea.innerText = "Cylinder Length (H)";
+                if(unitArea) unitArea.innerText = "m";
             }
             if(layersGroup) layersGroup.rotation.set(0,0,0);
             renderLayers();
@@ -1539,16 +1567,21 @@
             `).join('');
         }
 
+        // --- INTEGRASI PARAMETER AREA/PANJANG DALAM PERHITUNGAN SIMULASI ---
         function runSim() {
             const thot = parseFloat(document.getElementById('sim-thot').value);
             const tcold = parseFloat(document.getElementById('sim-tcold').value);
+            const areaVal = parseFloat(document.getElementById('sim-area').value || 1.0); 
+            
             let totalRt = 0;
             let currentRadius = 0.5;
             const temps = [thot];
             const positions = [currentGeo === 'flat' ? 0 : 0.5];
 
             layers.forEach(l => {
-                let rt = currentGeo === 'flat' ? (l.L / (l.k * 1.0)) : (Math.log((currentRadius + l.L) / currentRadius) / (2 * Math.PI * l.k * 1.0));
+                let rt = currentGeo === 'flat' 
+                    ? (l.L / (l.k * areaVal)) 
+                    : (Math.log((currentRadius + l.L) / currentRadius) / (2 * Math.PI * l.k * areaVal));
                 totalRt += rt;
                 currentRadius += l.L;
             });
@@ -1558,13 +1591,22 @@
             if(resRt) resRt.innerText = totalRt.toFixed(4);
             const resQ = document.getElementById('res-q');
             if(resQ) resQ.innerText = Math.abs(Q).toFixed(1);
+            
             const resFlux = document.getElementById('res-flux');
-            if(resFlux) resFlux.innerText = (Math.abs(Q)/1.0).toFixed(1);
+            if(resFlux) {
+                if (currentGeo === 'flat') {
+                    resFlux.innerText = (Math.abs(Q) / areaVal).toFixed(1);
+                } else {
+                    resFlux.innerText = "N/A (Radial)"; 
+                }
+            }
 
             let lastT = thot;
             let lastR = 0.5;
             layers.forEach(l => {
-                let rt = currentGeo === 'flat' ? (l.L / (l.k * 1.0)) : (Math.log((lastR + l.L) / lastR) / (2 * Math.PI * l.k * 1.0));
+                let rt = currentGeo === 'flat' 
+                    ? (l.L / (l.k * areaVal)) 
+                    : (Math.log((lastR + l.L) / lastR) / (2 * Math.PI * l.k * areaVal));
                 lastR += l.L;
                 lastT -= Q * rt;
                 temps.push(lastT);
@@ -1577,6 +1619,12 @@
         }
 
         function updateChart(pos, temps) {
+            // Guard clause to prevent "Chart is not defined" if Chart.js is still loading
+            if (typeof Chart === 'undefined') {
+                setTimeout(() => updateChart(pos, temps), 100);
+                return;
+            }
+
             const chartCanvas = document.getElementById('labChart');
             if(!chartCanvas) return;
             const ctx = chartCanvas.getContext('2d');
@@ -1621,7 +1669,7 @@
             container.innerHTML = html;
         }
 
-        // --- QUIZ FUNCTIONS (CHAPTER 1 & CHAPTER 2) ---
+        // --- QUIZ FUNCTIONS ---
         function startQuiz(chapter) {
             if (chapter === 'ch2') {
                 quizCurrentIndexCh2 = 0;
@@ -1642,50 +1690,7 @@
             }
         }
 
-        // --- CH1 Dots & Quiz ---
-        function renderQuizDots() {
-            const dotsContainer = document.getElementById('quiz-dots');
-            dotsContainer.innerHTML = quizQuestions.map((_, i) => `
-                <div class="w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-orange-600 w-4' : 'bg-slate-200'}"></div>
-            `).join('');
-        }
-
-        function updateQuizDots() {
-            const dots = document.querySelectorAll('#quiz-dots div');
-            dots.forEach((dot, i) => {
-                if(i === quizCurrentIndex) {
-                    dot.className = "w-4 h-2 rounded-full bg-orange-600 transition-all duration-300";
-                } else if (i < quizCurrentIndex) {
-                    dot.className = "w-2 h-2 rounded-full bg-emerald-400 transition-all duration-300";
-                } else {
-                    dot.className = "w-2 h-2 rounded-full bg-slate-200 transition-all duration-300";
-                }
-            });
-        }
-
-        function showQuestion() {
-            const q = quizQuestions[quizCurrentIndex];
-            quizSelectedAnswer = null;
-            document.getElementById('quiz-progress-text').innerText = `Question ${quizCurrentIndex + 1} of ${quizQuestions.length}`;
-            document.getElementById('quiz-question-text').innerText = q.q;
-            document.getElementById('quiz-feedback').innerText = "Select the most accurate answer.";
-            document.getElementById('quiz-feedback').className = "text-xs font-bold text-slate-400 italic";
-            
-            const optionsContainer = document.getElementById('quiz-options-container');
-            optionsContainer.innerHTML = q.options.map((opt, i) => `
-                <button onclick="selectQuizOption(${i})" class="quiz-option w-full p-5 rounded-2xl text-left font-bold text-slate-700 bg-white flex items-center gap-5 shadow-sm border-2 border-slate-100">
-                    <div class="w-10 h-10 min-w-[40px] rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 text-sm">${String.fromCharCode(65 + i)}</div>
-                    <span class="text-sm md:text-base">${opt}</span>
-                </button>
-            `).join('');
-
-            const nextBtn = document.getElementById('quiz-next-btn');
-            nextBtn.disabled = true;
-            nextBtn.className = "bg-slate-200 text-slate-400 font-black px-10 py-4 rounded-2xl transition-all cursor-not-allowed uppercase tracking-widest text-xs flex items-center gap-2";
-            updateQuizDots();
-        }
-
-        // --- CH2 Dots & Quiz (UPDATED INTERACTIVE LABELS & FEEDBACKS TO ENGLISH) ---
+        // --- CH2 Dots & Quiz ---
         function renderQuizDotsCh2() {
             const dotsContainer = document.getElementById('quiz-dots-ch2');
             dotsContainer.innerHTML = quizQuestionsCh2.map((_, i) => `
@@ -1706,6 +1711,7 @@
             });
         }
 
+        // --- DISPLAY CH2 QUESTIONS ---
         function showQuestionCh2() {
             const q = quizQuestionsCh2[quizCurrentIndexCh2];
             quizSelectedAnswerCh2 = null;
@@ -1747,6 +1753,7 @@
             document.getElementById('quiz-feedback-ch2').className = "text-xs font-bold text-blue-500 italic";
         }
 
+        // --- SUBMIT JAWAPAN CH2 ---
         function handleNextQuestionCh2() {
             if(quizSelectedAnswerCh2 === quizQuestionsCh2[quizCurrentIndexCh2].answer) quizScoreCh2++;
             if(quizCurrentIndexCh2 < quizQuestionsCh2.length - 1) {
@@ -1807,7 +1814,6 @@
             document.querySelectorAll('.chapter-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll(`.ch${chap}-content`).forEach(el => el.classList.remove('hidden'));
             
-            // Re-render 3D and charts if switching back to chapter 1 lab section
             const isLabActive = !document.getElementById('section-lab').classList.contains('hidden');
             if(chap === 1 && isLabActive) {
                 setTimeout(() => {
