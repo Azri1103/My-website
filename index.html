@@ -1690,6 +1690,112 @@
             }
         }
 
+        function renderQuizDots() {
+            const dotsContainer = document.getElementById('quiz-dots');
+            if(!dotsContainer) return;
+            dotsContainer.innerHTML = quizQuestions.map((_, i) => `
+                <div class="w-2 h-2 rounded-full transition-all duration-300 ${i === 0 ? 'bg-orange-600 w-4' : 'bg-slate-200'}"></div>
+            `).join('');
+        }
+
+        function updateQuizDots() {
+            const dots = document.querySelectorAll('#quiz-dots div');
+            dots.forEach((dot, i) => {
+                if(i === quizCurrentIndex) {
+                    dot.className = "w-4 h-2 rounded-full bg-orange-600 transition-all duration-300";
+                } else if (i < quizCurrentIndex) {
+                    dot.className = "w-2 h-2 rounded-full bg-emerald-400 transition-all duration-300";
+                } else {
+                    dot.className = "w-2 h-2 rounded-full bg-slate-200 transition-all duration-300";
+                }
+            });
+        }
+
+        function showQuestion() {
+            const q = quizQuestions[quizCurrentIndex];
+            quizSelectedAnswer = null;
+            document.getElementById('quiz-progress-text').innerText = `Question ${quizCurrentIndex + 1} of ${quizQuestions.length}`;
+            document.getElementById('quiz-question-text').innerText = q.q;
+            document.getElementById('quiz-feedback').innerText = "Select the most accurate answer.";
+            document.getElementById('quiz-feedback').className = "text-xs font-bold text-slate-400 italic";
+            
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = q.options.map((opt, i) => `
+                <button onclick="selectQuizOption(${i})" class="quiz-option w-full p-5 rounded-2xl text-left font-bold text-slate-700 bg-white flex items-center gap-5 shadow-sm border-2 border-slate-100">
+                    <div class="w-10 h-10 min-w-[40px] rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 text-sm">${String.fromCharCode(65 + i)}</div>
+                    <span class="text-sm md:text-base">${opt}</span>
+                </button>
+            `).join('');
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.disabled = true;
+            nextBtn.className = "bg-slate-200 text-slate-400 font-black px-10 py-4 rounded-2xl transition-all cursor-not-allowed uppercase tracking-widest text-xs flex items-center gap-2";
+            updateQuizDots();
+        }
+
+        function selectQuizOption(index) {
+            quizSelectedAnswer = index;
+            document.querySelectorAll('#quiz-options-container .quiz-option').forEach((opt, i) => {
+                if(i === index) {
+                    opt.className = "quiz-option selected w-full p-5 rounded-2xl text-left font-bold text-orange-700 bg-orange-50 flex items-center gap-5 shadow-md border-2 border-orange-500";
+                    opt.querySelector('div').className = "w-10 h-10 min-w-[40px] rounded-xl bg-orange-600 flex items-center justify-center text-white text-sm";
+                } else {
+                    opt.className = "quiz-option w-full p-5 rounded-2xl text-left font-bold text-slate-700 bg-white flex items-center gap-5 shadow-sm border-2 border-slate-100";
+                    opt.querySelector('div').className = "w-10 h-10 min-w-[40px] rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 text-sm";
+                }
+            });
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = "bg-orange-600 text-white font-black px-10 py-4 rounded-2xl shadow-xl transform hover:scale-105 transition-all uppercase tracking-widest text-xs flex items-center gap-2";
+            
+            document.getElementById('quiz-feedback').innerText = "Choice confirmed. Ready to proceed?";
+            document.getElementById('quiz-feedback').className = "text-xs font-bold text-orange-500 italic";
+        }
+
+        function handleNextQuestion() {
+            if(quizSelectedAnswer === quizQuestions[quizCurrentIndex].answer) quizScore++;
+            if(quizCurrentIndex < quizQuestions.length - 1) {
+                quizCurrentIndex++;
+                showQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-question-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.remove('hidden');
+            
+            const scorePercent = (quizScore / quizQuestions.length) * 100;
+            const iconContainer = document.getElementById('result-icon-container');
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+            
+            if (scorePercent >= 80) {
+                iconContainer.className = "w-32 h-32 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl";
+                icon.className = "fa-solid fa-trophy text-6xl";
+                title.innerText = "Congratulations! Excellent!";
+                message.innerText = "You have a solid grasp of thermal heat transfer principles.";
+            } else if (scorePercent >= 50) {
+                iconContainer.className = "w-32 h-32 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl";
+                icon.className = "fa-solid fa-star text-6xl";
+                title.innerText = "Good Effort!";
+                message.innerText = "Your basic understanding is good, but some subtopics need further review.";
+            } else {
+                iconContainer.className = "w-32 h-32 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl";
+                icon.className = "fa-solid fa-book-open-reader text-6xl";
+                title.innerText = "Keep Learning!";
+                message.innerText = "Please review the conduction, convection, and radiation notes to strengthen your theory.";
+            }
+            
+            document.getElementById('quiz-final-score').innerText = `${quizScore}/${quizQuestions.length}`;
+        }
+
+        function resetQuiz() {
+            startQuiz('ch1');
+        }
+
         // --- CH2 Dots & Quiz ---
         function renderQuizDotsCh2() {
             const dotsContainer = document.getElementById('quiz-dots-ch2');
